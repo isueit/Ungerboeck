@@ -1,0 +1,145 @@
+<?php
+
+/**
+ * @file
+ * Pull a JSON file from Ungerboeck, and display the events in a block.
+ */
+
+
+/**
+ * Implements hook_menu().
+ */
+function ungerboeck_events_menu() {
+  $items['admin/config/content/ungerboeck'] = array(
+    'title' => 'Ungerboeck Events',
+    'description' => 'Display Events from Ungerboeck in a Block',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('ungerboeck_events_settings'),
+    'access arguments' => array('administer ungerboeck events'),
+    'file' => 'ungerboeck_events.admin.inc',
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_block_info().
+ */
+function ungerboeck_events_block_info() {
+  // Create the right appropriate number of blocks
+  $number = variable_get('ungerboeck_events_numberofblocks', '1');
+
+  for ($i = 1; $i <= $number; $i++) {
+    $blocks['ungerboeck_events_' . $i] = array(
+      'info' => t('Ungerboeck - Show Events ' . $i),
+      'cache' => DRUPAL_NO_CACHE,
+    );
+  }
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_configure().
+ */
+function ungerboeck_events_block_configure($delta = "") {
+  $form = array();
+  if (drupal_substr($delta, 0, 17) === 'ungerboeck_events') {
+    $settings = variable_get($delta . '_block', ungerboeck_events_defaults());
+
+    $form[$delta] = array(
+      '#type' => 'fieldset',
+      '#collaspible' => TRUE,
+      '#collasped' => TRUE,
+    );
+
+    $form[$delta][$delta . '_orgcode'] = array(
+      '#type' => 'textfield',
+      '#title' => t('OrgCode'),
+      '#description' => t('For ISU, this is usually 10'),
+'#size' => 15,
+      '#default_value' => $settings['orgcode'],
+    );
+
+    $form[$delta][$delta . '_search'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Search String'),
+      '#description' => t('This is the OData search string. Note: #TodayDate# will be replaced by the actual date'),
+'#size' => 175,
+'#maxlength' => 300,
+      '#default_value' => $settings['search'],
+    );
+
+    $form[$delta][$delta . '_format'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Date Format'),
+      '#description' => t('Format of the date, see <a href="http://php.net/manual/en/function.date.php">php date manual</a>'),
+      '#default_value' => $settings['format'],
+    );
+  }
+
+  return $form;
+}
+
+/**
+ * Implements hook_block_save().
+ */
+function ungerboeck_events_block_save($delta = '', $edit = array()) {
+  if (drupal_substr($delta, 0, 17) === 'ungerboeck_events') {
+    $settings['orgcode'] = $edit[$delta . '_orgcode'];
+    $settings['search'] = $edit[$delta . '_search'];
+    $settings['format'] = $edit[$delta . '_format'];
+
+    variable_set($delta . '_block',  $settings);
+  }
+}
+
+
+/**
+ * Implements hook_block_view().
+ */
+function ungerboeck_events_block_view($delta = '') {
+  $token = ungerboeck_helpers_get_token();
+  $blocksettings = variable_get($delta . '_block', ungerboeck_events_defaults());
+
+  $event_list = ungerboeck_helpers_get_event_list($blocksettings['orgcode'], $blocksettings['search'], $token);
+  $json_events = json_decode(strip_tags($event_list), TRUE);
+
+  $results = '<ul class="' .$delta . '">';
+
+  foreach ($json_events as $event) {
+    $time = strtotime(ungerboeck_helpers_combine_date_time($event['StartDate'], $event['StartTime']));
+    $location = $event['Description'];
+    $webaddress = $event['WebAddress'];
+
+    if ($event['WebAddress'] == '') {
+      $event_details = json_decode(strip_tags(ungerboeck_helpers_get_event_details($blocksettings['orgcode'], $event['EventID'], $token)), TRUE);
+      $webaddress = $event_details['EventUserFieldSets'][0]['UserText01'];
+    }
+
+    $results .= '<li>';
+    $results .= '<a href="' . $webaddress . '">' . $location;
+    $results .= '</a><br/>';
+    $results .= date($blocksettings['format'], $time) . '<br/>';
+
+    $results .= '</li>';
+  }
+
+  $results .= '</ul>';
+
+  $block['content'] = $results;
+
+  return $block;
+}
+
+/**
+ * Return the default settings for each block
+ */
+function ungerboeck_events_defaults() {
+  return array(
+    'orgcode' => 10,
+    'search' => 'Account%20eq%20\'00000150\'%20and%20StartDate%20ge%20DateTime\'#TodayDate#\'%24orderby%3DStartDate%2CStartTime%24page_size%3D4',
+    'format' => 'l, F j, Y',
+  );
+}
+
