@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains ungerboeck_helpers.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ungerboeck_helpers_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the ungerboeck_helpers module.
+    case 'help.page.ungerboeck_helpers':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Includes functions that could be used by multiple Ungerboeck modules') . '</p>';
+      return $output;
+
+    default:
+  }
+}
