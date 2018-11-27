@@ -2,7 +2,8 @@ name: 'Ungerboeck Helpers'
 type: module
 description: 'Includes functions that could be used by multiple Ungerboeck modules'
 core: 8.x
+version: 8.x-1.0-dev
 package: 'ISUEO'
 dependencies:
-  - block
-  - encrypt
+  - drupal:block
+  - encrypt:encrypt
