@@ -1,0 +1,7 @@
+ungerboeck_helpers.admin_settings_form:
+  title: 'Ungerboeck Helpers Settings'
+  route_name: ungerboeck_helpers.admin_settings_form
+  description: 'Helper functions for Ungerboeck modules'
+  parent: system.admin_config_content
+  weight: 99
+

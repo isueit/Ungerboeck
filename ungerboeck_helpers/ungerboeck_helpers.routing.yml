@@ -1,0 +1,11 @@
+
+ungerboeck_helpers.admin_settings_form:
+  path: '/adming/config/content/ungerboeck/ungerboeck_helpers_adminsettings'
+  defaults:
+    _form: '\Drupal\ungerboeck_helpers\Form\AdminSettingsForm'
+    _title: 'AdminSettingsForm'
+  requirements:
+    _permission: 'access administration pages'
+  options:
+    _admin_route: TRUE
+
