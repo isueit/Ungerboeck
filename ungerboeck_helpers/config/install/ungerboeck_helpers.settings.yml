@@ -1,3 +1,4 @@
 username: "rubiapiuser"
 password: ""
 server_url: "https://registration.extension.iastate.edu"
+encryption_profile: "ungerboeck"

@@ -31,7 +31,7 @@ function ungerboeck_helpers_help($route_name, RouteMatchInterface $route_match) 
 function ungerboeck_helpers_get_token() {
   $config = \Drupal::config('ungerboeck_helpers.settings');
 
-  $encryption_profile = EncryptionProfile::load('ungerboeck');
+  $encryption_profile = EncryptionProfile::load($config->get('encryption_profile'));
   $server_URL = $config->get('server_url');
   $username = $config->get('username');
   $password = \Drupal::service('encryption')->decrypt($config->get('password'), $encryption_profile);

@@ -54,6 +54,14 @@ class SettingsForm extends ConfigFormBase {
       '#size' => 64,
       '#default_value' => $config->get('server_url'),
     ];
+    $form['encryption_profile'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Encryption Profile'),
+      '#description' => $this->t('The Encryption Profile from <a href="admin/config/system/encryption/profiles">this config page</a>. Note: This should be a dropdown.'),
+      '#maxlength' => 64,
+      '#size' => 64,
+      '#default_value' => $config->get('encryption_profile'),
+    ];
     return parent::buildForm($form, $form_state);
   }
 
@@ -68,7 +76,7 @@ class SettingsForm extends ConfigFormBase {
     $config = $this->config('ungerboeck_helpers.settings');
     $saved_password = $config->get('password');
     $new_password = $form_state->getValue('password');
-    $encryption_profile = EncryptionProfile::load('ungerboeck');
+    $encryption_profile = EncryptionProfile::load($config->get('encryption_profile'));
 
     if (empty($new_password)) {
       $form_state->setValue('password', $saved_password);
@@ -90,6 +98,7 @@ class SettingsForm extends ConfigFormBase {
       ->set('username', $form_state->getValue('username'))
       ->set('password', $form_state->getValue('password'))
       ->set('server_url', $form_state->getValue('server_url'))
+      ->set('encryption_profile', $form_state->getValue('encryption_profile'))
       ->save();
   }
 
