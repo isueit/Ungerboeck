@@ -6,6 +6,7 @@ ungerboeck_helpers.admin_settings_form:
     _title: 'Ungerboeck Helpers Settings'
   requirements:
     _permission: 'access administration pages'
+    _permission: 'administer ungerboeck helpers'
   options:
     _admin_route: TRUE
 
