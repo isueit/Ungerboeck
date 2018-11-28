@@ -43,14 +43,14 @@ class AdminSettingsForm extends ConfigFormBase {
       '#type' => 'password',
       '#title' => $this->t('Password'),
       '#description' => $this->t('Password for the above account. Note: this is not a secure password storage facility, so you should be using an account that has basically no rights. This field is blank even if a password is already set, that&#039;s OK.'),
-      '#maxlength' => 64,
       '#size' => 64,
       '#default_value' => $config->get('password'),
     ];
     $form['server_url'] = [
-      '#type' => 'testfield',
+      '#type' => 'textfield',
       '#title' => $this->t('Server running the Ungerboeck API'),
       '#description' => $this->t('The URL of server running the Ungerboeck API, for ISU, the above URL shouldn&#039;t have to change.'),
+      '#size' => 64,
       '#default_value' => $config->get('server_url'),
     ];
     return parent::buildForm($form, $form_state);
