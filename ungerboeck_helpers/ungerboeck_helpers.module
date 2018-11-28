@@ -70,3 +70,27 @@ function ungerboeck_helpers_fix_search_string($search_string) {
   return $search_string;
 }
 
+
+/**
+ * Get a list of events using the API.
+ */
+function ungerboeck_helpers_get_event_list($orgcode, $search_string, $token) {
+  $config = \Drupal::config('ungerboeck_helpers.settings');
+
+  $server_URL = $config->get('server_url');
+  $search_URL = $server_URL . '/api/v1/Events/' . $orgcode . '?search=' . ungerboeck_helpers_fix_search_string($search_string);
+  $token = trim(str_replace('"', '', $token));
+
+  // Fetch the page
+  $curl_handle = curl_init();
+  curl_setopt($curl_handle, CURLOPT_URL, $search_URL);
+  curl_setopt($curl_handle, CURLOPT_HTTPHEADER, array('token: ' . $token));
+  curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 1);
+  //curl_setopt($curl_handle, CURLOPT_HEADER, 1);
+
+  $buffer = curl_exec($curl_handle);
+  curl_close($curl_handle);
+
+  return $buffer;
+}
