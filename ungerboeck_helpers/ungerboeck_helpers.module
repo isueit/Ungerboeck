@@ -49,3 +49,9 @@ function ungerboeck_helpers_get_token() {
 }
 
 
+/**
+ * Get today's date in yyyy-mm-dd format.
+ */
+function ungerboeck_helpers_get_todays_date() {
+  return date('Y-m-d');
+}
