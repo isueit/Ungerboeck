@@ -24,6 +24,10 @@ You need to make a key, then use that key and Real AES to set up Encryption prof
 See: https://www.drupal.org/docs/8/modules/encrypt/general-drupal-8-encrypt-setup-and-recommendations
 
 
+## Todo
+1) Improve the installation of required modules
+2) Put the machine name of the Encryption profile into the form, instead of hard coded.
+   Ideally, this would give a dropdown list of available profiles.
 
 
 To use this module:
