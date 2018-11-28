@@ -55,3 +55,18 @@ function ungerboeck_helpers_get_token() {
 function ungerboeck_helpers_get_todays_date() {
   return date('Y-m-d');
 }
+
+
+/**
+ * Do substitutions to fix the search string to match what Ungerboeck wants.
+ */
+function ungerboeck_helpers_fix_search_string($search_string) {
+  $search_string = str_replace('#TodayDate#', ungerboeck_helpers_get_todays_date(), $search_string);
+  $search_string = str_replace(' ', '%20', $search_string);
+  $search_string = str_replace('$', '%24', $search_string);
+  $search_string = str_replace('=', '%3D', $search_string);
+
+
+  return $search_string;
+}
+
