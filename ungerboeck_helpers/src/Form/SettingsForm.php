@@ -4,6 +4,7 @@ namespace Drupal\ungerboeck_helpers\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\encrypt\Entity\EncryptionProfile;
 
 /**
  * Class SettingsForm.
@@ -44,7 +45,7 @@ class SettingsForm extends ConfigFormBase {
       '#title' => $this->t('Password'),
       '#description' => $this->t('Password for the above account. Note: this is not a secure password storage facility, so you should be using an account that has basically no rights. This field is blank even if a password is already set, that&#039;s OK.'),
       '#size' => 64,
-      '#default_value' => $config->get('password'),
+      '#default_value' => t(''),
     ];
     $form['server_url'] = [
       '#type' => 'textfield',
@@ -61,6 +62,22 @@ class SettingsForm extends ConfigFormBase {
    */
   public function validateForm(array &$form, FormStateInterface $form_state) {
     parent::validateForm($form, $form_state);
+
+    // If a new password is given, then encrypt it and save it,
+    // otherwise use the old password
+    $config = $this->config('ungerboeck_helpers.settings');
+    $saved_password = $config->get('password');
+    $new_password = $form_state->getValue('password');
+    $encryption_profile = EncryptionProfile::load('ungerboeck');
+
+    if (empty($new_password)) {
+      $form_state->setValue('password', $saved_password);
+    }
+    else {
+      if ($new_password != $saved_password) {
+        $form_state->setValue('password', \Drupal::service('encryption')->encrypt($new_password, $encryption_profile));
+      }
+    }
   }
 
   /**
