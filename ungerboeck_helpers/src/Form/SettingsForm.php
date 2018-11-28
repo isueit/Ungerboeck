@@ -6,16 +6,16 @@ use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
- * Class AdminSettingsForm.
+ * Class SettingsForm.
  */
-class AdminSettingsForm extends ConfigFormBase {
+class SettingsForm extends ConfigFormBase {
 
   /**
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
     return [
-      'ungerboeck_helpers.adminsettings',
+      'ungerboeck_helpers.settings',
     ];
   }
 
@@ -23,14 +23,14 @@ class AdminSettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'admin_settings_form';
+    return 'settings_form';
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('ungerboeck_helpers.adminsettings');
+    $config = $this->config('ungerboeck_helpers.settings');
     $form['username'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Username'),
@@ -69,7 +69,7 @@ class AdminSettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     parent::submitForm($form, $form_state);
 
-    $this->config('ungerboeck_helpers.adminsettings')
+    $this->config('ungerboeck_helpers.settings')
       ->set('username', $form_state->getValue('username'))
       ->set('password', $form_state->getValue('password'))
       ->set('server_url', $form_state->getValue('server_url'))
