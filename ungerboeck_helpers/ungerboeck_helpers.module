@@ -94,3 +94,14 @@ function ungerboeck_helpers_get_event_list($orgcode, $search_string, $token) {
 
   return $buffer;
 }
+
+
+/**
+ * Combine Date and Time into one variable.
+ */
+function ungerboeck_helpers_combine_date_time($StartDate, $StartTime) {
+  $location_date = strpos($StartDate, 'T');
+  $location_time = strpos($StartTime, 'T');
+
+  return substr($StartDate, 0, $location_date) . substr($StartTime, $location_time);
+}
