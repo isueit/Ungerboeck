@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\encrypt\Entity\EncryptionProfile;
 
 /**
  * Implements hook_help().
@@ -22,3 +23,29 @@ function ungerboeck_helpers_help($route_name, RouteMatchInterface $route_match) 
     default:
   }
 }
+
+
+/**
+ * Get the login token to access the API
+ */
+function ungerboeck_helpers_get_token() {
+  $config = \Drupal::config('ungerboeck_helpers.settings');
+
+  $encryption_profile = EncryptionProfile::load('ungerboeck');
+  $server_URL = $config->get('server_url');
+  $username = $config->get('username');
+  $password = \Drupal::service('encryption')->decrypt($config->get('password'), $encryption_profile);
+
+  // Fetch the page
+  $curl_handle = curl_init();
+  curl_setopt($curl_handle, CURLOPT_URL, $server_URL . '/api/v1/sdk_initialize');
+  curl_setopt($curl_handle, CURLOPT_HTTPHEADER, array('Authorization: Basic ' . base64_encode($username . ':' . $password)));
+  curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 1);
+  $buffer = curl_exec($curl_handle);
+  curl_close($curl_handle);
+
+  return $buffer;
+}
+
+
