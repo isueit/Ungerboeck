@@ -1,0 +1,11 @@
+name: 'Ungerboeck Show Events'
+type: module
+description: 'Pull info from Ungerboeck, and display events in a block'
+core: 8.x
+version: 8.x-1.0-dev
+package: 'ISUEO'
+dependencies:
+  - drupal:block
+  - encrypt:encrypt
+  - ungerboeck_helpers:ungerboeck_helpers
+  - real_aes:real_aes
