@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * @file
+ * Contains ungerboeck_servsafe.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ungerboeck_servsafe_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the ungerboeck_helpers module.
+    case 'help.page.ungerboeck_servsafe':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Pull ServSafe info from Ungerboeck, and display events in a block') . '</p>';
+      return $output;
+
+    default:
+  }
+}
