@@ -37,7 +37,7 @@ class ServSafeEvents extends BlockBase {
 
     if ($event['WebAddress'] == '') {
       $event_details = json_decode(strip_tags(ungerboeck_helpers_get_event_details($config['orgcode'], $event['EventID'], $token)), TRUE);
-      $webaddress = $event_details['EventUserFieldSets'][0]['UserText01']';
+      $webaddress = $event_details['EventUserFieldSets'][0]['UserText01'];
     }
 
     $results .= '<li>';
