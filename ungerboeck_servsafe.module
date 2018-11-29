@@ -103,6 +103,8 @@ function ungerboeck_servsafe_block_view($delta = '') {
     $results .= '</li>';
   }
 
+  $results .= '</ul>';
+
   $block['content'] = $results;
 
   return $block;
