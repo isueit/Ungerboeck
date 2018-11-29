@@ -37,6 +37,30 @@ class ServSafeEvents extends BlockBase {
    */
   public function blockForm($form, FormStateInterface $form_state) {
     $config = $this->getConfiguration();
+//    $form['ungerboeck_fieldset'] = array(
+//      '#type' => 'fieldset',
+//      '#collaspible' => TRUE,
+//      '#collasped' => TRUE,
+//    );
+
+//    $form['ungerboeck_fieldset']['orgcode'] = array(
+    $form['orgcode'] = array(
+      '#type' => 'textfield',
+      '#title' => t('OrgCode'),
+      '#description' => t('For ISU, this is usually 10'),
+      '#size' => 15,
+      '#default_value' => isset($config['orgcode']) ? $config['orgcode'] : '10',
+    );
+
+//    $form['ungerboeck_fieldset']['search_string'] = array(
+    $form['search_string'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Search String'),
+      '#description' => t('This is the OData search string.<br/>Note: #TodayDate# will be replaced by the actual date'),
+      '#size' => 175,
+      '#maxlength' => 300,
+      '#default_value' => isset($config['search_string']) ? $config['search_string'] : 'search_string',
+    );
 
     return $form;
   }
@@ -46,5 +70,7 @@ class ServSafeEvents extends BlockBase {
    */
   public function blockSubmit($form, FormStateInterface $form_state) {
     $this->configuration['ungerboeck_servsafe_settings'] = $form_state->getValue('ungerboeck_servsafe_settings');
+    $this->configuration['orgcode'] = $form_state->getValue('orgcode');
+    $this->configuration['search_string'] = $form_state->getValue('search_string');
   }
 }
