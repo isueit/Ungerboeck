@@ -1,0 +1,12 @@
+
+ungerboeck_events.admin_settings_form:
+  path: '/adming/config/content/ungerboeck/ungerboeck_events_settings'
+  defaults:
+    _form: '\Drupal\ungerboeck_events\Form\SettingsForm'
+    _title: 'Ungerboeck Events Settings'
+  requirements:
+    _permission: 'access administration pages'
+    _permission: 'administer ungerboeck events'
+  options:
+    _admin_route: TRUE
+
