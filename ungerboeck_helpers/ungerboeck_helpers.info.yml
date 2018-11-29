@@ -7,3 +7,4 @@ package: 'ISUEO'
 dependencies:
   - drupal:block
   - encrypt:encrypt
+  - real_aes:real_aes
