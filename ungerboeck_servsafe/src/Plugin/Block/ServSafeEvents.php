@@ -116,7 +116,7 @@ class ServSafeEvents extends BlockBase {
   public function defaultConfiguration() {
     return array(
       'orgcode' => '10',
-      'search_string' => 'Account eq \'00000150\' and Status eq \'30\' and StartDate ge DateTime\'#TodayDate#\'$orderby=StartDate,StartTime$page_size=4',
+      'search_string' => 'Account eq \'00000150\' and Description eq \'SERVSAFE\' and Status eq \'30\' and StartDate ge DateTime\'#TodayDate#\'$orderby=StartDate,StartTime$page_size=100',
     );
   }
 }
