@@ -95,6 +95,28 @@ function ungerboeck_helpers_get_event_list($orgcode, $search_string, $token) {
   return $buffer;
 }
 
+/**
+ * Get details of an event.
+ */
+function ungerboeck_helpers_get_event_details($orgcode, $eventID, $token) {
+  $config = \Drupal::config('ungerboeck_helpers.settings');
+
+  $server_URL = $config->get('server_url');
+  $search_URL = $server_URL . '/api/v1/Events/' . $orgcode . '/' . $eventID;
+
+  // Fetch the page
+  $curl_handle = curl_init();
+  curl_setopt($curl_handle, CURLOPT_URL, $search_URL);
+  curl_setopt($curl_handle, CURLOPT_HTTPHEADER, array('token: ' . $token));
+  //curl_setopt($curl_handle, CURLOPT_HEADER, 1);
+  curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 1);
+  $buffer = curl_exec($curl_handle);
+  curl_close($curl_handle);
+
+  return $buffer;
+}
+
 
 /**
  * Combine Date and Time into one variable.
