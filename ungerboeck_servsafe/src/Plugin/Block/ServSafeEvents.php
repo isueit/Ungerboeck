@@ -21,38 +21,38 @@ class ServSafeEvents extends BlockBase {
    */
   public function build() {
     $config = $this->getConfiguration();
-  $token = ungerboeck_helpers_get_token();
+    $token = ungerboeck_helpers_get_token();
 
-  $event_list = ungerboeck_helpers_get_event_list($config['orgcode'], $config['search_string'], $token);
-  $json_events = json_decode(strip_tags($event_list), TRUE);
+    $event_list = ungerboeck_helpers_get_event_list($config['orgcode'], $config['search_string'], $token);
+    $json_events = json_decode(strip_tags($event_list), TRUE);
 
-  $results = '<ul class="ungerboeck_servsafe">';
+    $results = '<ul class="ungerboeck_servsafe">';
 
-  foreach ($json_events as $event) {
-    $time = strtotime($event['StartDate']);
-    $location = str_replace(', IA', '', $event['Description']);
-    $location = str_replace('SERVSAFE (Spanish) - ', '', $location);
-    $location = str_replace('SERVSAFE - ', '', $location);
-    $webaddress = $event['WebAddress'];
+    foreach ($json_events as $event) {
+      $time = strtotime($event['StartDate']);
+      $location = str_replace(', IA', '', $event['Description']);
+      $location = str_replace('SERVSAFE (Spanish) - ', '', $location);
+      $location = str_replace('SERVSAFE - ', '', $location);
+      $webaddress = $event['WebAddress'];
 
-    if ($event['WebAddress'] == '') {
-      $event_details = json_decode(strip_tags(ungerboeck_helpers_get_event_details($config['orgcode'], $event['EventID'], $token)), TRUE);
-      $webaddress = $event_details['EventUserFieldSets'][0]['UserText01'];
+      if ($event['WebAddress'] == '') {
+        $event_details = json_decode(strip_tags(ungerboeck_helpers_get_event_details($config['orgcode'], $event['EventID'], $token)), TRUE);
+        $webaddress = $event_details['EventUserFieldSets'][0]['UserText01'];
+      }
+
+      $results .= '<li>';
+      $results .= '<a href="' . $webaddress . '">' . $location;
+      if (strpos($event['Description'], 'Spanish') != FALSE) {
+        $results .= ' (Spanish)';
+      }
+
+      $results .= '</a><br/>';
+      $results .= date('l, F j, Y', $time) . '<br/>';
+
+      $results .= '</li>';
     }
 
-    $results .= '<li>';
-    $results .= '<a href="' . $webaddress . '">' . $location;
-    if (strpos($event['Description'], 'Spanish') != FALSE) {
-      $results .= ' (Spanish)';
-    }
-
-    $results .= '</a><br/>';
-    $results .= date('l, F j, Y', $time) . '<br/>';
-
-    $results .= '</li>';
-  }
-
-  $results .= '</ul>';
+    $results .= '</ul>';
 
     return [
       '#markup' => $this->t($results),
