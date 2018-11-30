@@ -9,3 +9,4 @@ dependencies:
   - encrypt:encrypt
   - real_aes:real_aes
   - ungerboeck_helpers:ungerboeck_helpers
+configure: ungerboeck_events.admin_settings_form

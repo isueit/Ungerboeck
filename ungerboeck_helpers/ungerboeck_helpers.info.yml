@@ -8,3 +8,4 @@ dependencies:
   - drupal:block
   - encrypt:encrypt
   - real_aes:real_aes
+configure: ungerboeck_helpers.admin_settings_form
