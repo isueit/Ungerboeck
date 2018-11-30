@@ -76,8 +76,9 @@ class EventBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function blockAccess(AccountInterface $account, $return_as_object = FALSE) {
-    return AccessResult::allowedIfHasPermission($account, 'access  content');
+    return AccessResult::allowedIfHasPermission($account, 'access content');
   }
+
 
   /**
    * {@inheritdoc}
