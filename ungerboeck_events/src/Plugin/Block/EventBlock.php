@@ -31,17 +31,18 @@ class EventBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
+    $id = $this->getDerivativeID();
     $config = $this->getConfiguration();
     $token = ungerboeck_helpers_get_token();
 
     $event_list = ungerboeck_helpers_get_event_list($config['orgcode'], $config['search_string'], $token);
     $json_events = json_decode(strip_tags($event_list), TRUE);
 
-    $results = '<ul class="' .$delta . '">';
+    $results = '<ul class="ungerboeck_events ungerboeck_events_' .$id . '">';
 
     foreach ($json_events as $event) {
       $time = strtotime(ungerboeck_helpers_combine_date_time($event['StartDate'], $event['StartTime']));
-      $location = $event['Description'];
+      $title = $event['Description'];
       $webaddress = $event['WebAddress'];
 
       if ($event['WebAddress'] == '') {
@@ -50,10 +51,17 @@ class EventBlock extends BlockBase {
       }
 
       $results .= '<li>';
-      $results .= '<a href="' . $webaddress . '">' . $location;
-      $results .= '</a><br/>';
-      $results .= date($config['format'], $time) . '<br/>';
 
+      // Handle web address
+      if (!empty($webaddress)) {
+        $results .= '<a href="' . $webaddress . '">' . $title;
+        $results .= '</a><br/>';
+      }
+      else {
+        $results .= $title . '<br/>';
+      }
+
+      $results .= date($config['format'], $time) . '<br/>';
       $results .= '</li>';
     }
 
