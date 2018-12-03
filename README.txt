@@ -29,6 +29,7 @@ See: https://www.drupal.org/docs/8/modules/encrypt/general-drupal-8-encrypt-setu
 2) Put the machine name of the Encryption profile into the form, instead of hard coded.
    Ideally, this would give a dropdown list of available profiles.
 3) Look at Tim's app to see if we can get more info to display
+4) Add span tags so title and date can be formated with css
 
 
 To use this module:
