@@ -31,11 +31,20 @@ class EventBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
+$startblock = microtime(TRUE);
     $id = $this->getDerivativeID();
     $config = $this->getConfiguration();
+$starttime = microtime(TRUE);
     $token = ungerboeck_helpers_get_token();
+$endtime = microtime(TRUE);
+\Drupal::logger('ungerboeck_events')->notice($endtime - $starttime . ': Get token');
 
+$starttime = $endtime;
     $event_list = ungerboeck_helpers_get_event_list($config['orgcode'], $config['search_string'], $token);
+$endtime = microtime(TRUE);
+\Drupal::logger('ungerboeck_events')->notice($endtime - $starttime . ': Get events');
+
+
     $json_events = json_decode(strip_tags($event_list), TRUE);
 
     $results = '<ul class="ungerboeck_events ungerboeck_events_' .$id . '">';
@@ -45,10 +54,13 @@ class EventBlock extends BlockBase {
       $title = $event['Description'];
       $webaddress = $event['WebAddress'];
 
-      if ($event['WebAddress'] == '') {
-        $event_details = json_decode(strip_tags(ungerboeck_helpers_get_event_details($config['orgcode'], $event['EventID'], $token)), TRUE);
-        $webaddress = $event_details['EventUserFieldSets'][0]['UserText01'];
-      }
+//      if ($event['WebAddress'] == '') {
+//$starttime = $endtime;
+//        $event_details = json_decode(strip_tags(ungerboeck_helpers_get_event_details($config['orgcode'], $event['EventID'], $token)), TRUE);
+//$endtime = microtime(TRUE);
+//\Drupal::logger('ungerboeck_events')->notice($endtime - $starttime . ': ' . $event['EventID']);
+//        $webaddress = $event_details['EventUserFieldSets'][0]['UserText01'];
+//      }
 
       $results .= '<li>';
 
@@ -66,6 +78,8 @@ class EventBlock extends BlockBase {
     }
 
     $results .= '</ul>';
+$endblock = microtime(TRUE);
+\Drupal::logger('ungerboeck_events')->notice($endblock - $startblock . ': Block build time');
 
     return [
       '#markup' => $this->t($results),
