@@ -1,5 +1,5 @@
 {
   "name": "isueo/ungerboeck",
   "description": "Use Ungerboeck's API to pull events",
-  "type": "drupal-isueo-module"
+  "type": "drupal-custom-module"
 }
