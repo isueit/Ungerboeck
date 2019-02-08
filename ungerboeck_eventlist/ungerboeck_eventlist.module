@@ -1,0 +1,26 @@
+<?php
+
+/**
+ * @file
+ * Contains ungerboeck_eventlist.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function ungerboeck_eventlist($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the ungerboeck_eventlist module.
+    case 'help.page.ungerboeck_eventlist':
+      $output = '';
+      //$output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Pulls a list of events from Ungerboeck, and display them in a block') . '</p>';
+      $output .= '<p>&nbsp;</p>';
+      return $output;
+
+    default:
+  }
+}
+

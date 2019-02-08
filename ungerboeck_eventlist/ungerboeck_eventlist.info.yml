@@ -1,0 +1,9 @@
+name: 'Ungerboeck Event List'
+type: module
+description: 'Pull info from Ungerboeck without using the API, and display events in a block'
+core: 8.x
+version: 8.x-1.0-dev
+package: 'ISUEO'
+dependencies:
+  - drupal:block
+configure: ungerboeck_eventlist.admin_settings_form

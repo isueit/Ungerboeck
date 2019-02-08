@@ -1,0 +1,7 @@
+ungerboeck_eventlist.admin_settings_form:
+  title: 'Ungerboeck Event List'
+  route_name: ungerboeck_eventlist.admin_settings_form
+  description: 'Pull Ungerboeck Events into block(s)'
+  parent: system.admin_config_content
+  weight: 99
+
