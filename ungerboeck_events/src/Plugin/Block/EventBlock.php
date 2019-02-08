@@ -74,6 +74,7 @@ $endtime = microtime(TRUE);
       }
 
       $results .= date($config['format'], $time) . '<br/>';
+$results .= $event['EventID'] . '<br/>';
       $results .= '</li>';
     }
 
