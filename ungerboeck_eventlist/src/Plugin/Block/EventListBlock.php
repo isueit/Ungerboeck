@@ -135,16 +135,11 @@ $time = strtotime(substr($event['EVENTSTARTDATE'], 0, $location_date) . substr($
         //$results .= '</a><br/>';
       //}
       //else {
-        $results .= $title . '<br/>';
+        $results .= '<a href="' . base_path() . 'event_details?eventID=' . $event['EVENTID'] .'" class="event_title">' . $title . '</a><br/>';
       //}
 
-$results .= $event['ANCHORVENUE'] . '<br />';
-      $results .= date($config['format'], $time) . '<br/>';
-$results.= $event['EVENTID'] . '<br />';
-$results.= $event['WEBADDRESS'] . '<br />';
-$results.= $event['REGDETAILSLIST'][0]['REGISTRATIONSTARTDATE'] . '<br />';
-$results.= $event['REGDETAILSLIST'][0]['REGISTRATIONLINK'] . '<br />';
-$results.= $event['REGDETAILSLIST'][0]['REGISTRATIONENDDATE'] . '<br />';
+      $results .= '<span class="event_venue">' . $event['ANCHORVENUE'] . '</span><br />';
+      $results .= '<span class="event_date">' .date($config['format'], $time) . '</span><br/>';
 
       $results .= '</li>';
     }
