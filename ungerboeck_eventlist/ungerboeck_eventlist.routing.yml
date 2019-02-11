@@ -14,7 +14,7 @@ ungerboeck_eventlist.admin_settings_form:
 ungerboeck_eventlist.event_details:
   path: '/event_details'
   defaults:
-    _controller: '\Drupal\ungerboeck_eventlist\Controller\ExampleController::event_details'
+    _controller: '\Drupal\ungerboeck_eventlist\Controller\EventDetailsController::event_details'
     _title: 'Details of Event'
   requirements:
     _permission: 'access content'

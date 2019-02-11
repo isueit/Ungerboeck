@@ -4,9 +4,9 @@ namespace Drupal\ungerboeck_eventlist\Controller;
 use Drupal\Core\Controller\ControllerBase;
 
 /**
- * Provides route responses for the Example module.
+ * Provides route responses for the ungerboeck_eventlist  module.
  */
-class ExampleController extends ControllerBase {
+class EventDetailsController extends ControllerBase {
 
   /**
    * Returns a simple page.
