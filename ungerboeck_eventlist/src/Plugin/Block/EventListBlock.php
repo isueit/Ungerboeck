@@ -34,9 +34,10 @@ class EventListBlock extends BlockBase {
 //$startblock = microtime(TRUE);
     $id = $this->getDerivativeID();
     $config = $this->getConfiguration();
+$module_config = \Drupal::config('ungerboeck_eventlist.settings');
 
 #$search_url = $config['url'] . '/' . date('m-d-Y') . '/null/null/' . $config['account_number'];
-$search_url = $config['url'] . '/02-01-2019/null/null/' . $config['account_number'];
+$search_url = $module_config->get('url') . '/02-01-2019/null/null/' . $config['account_number'];
 
   // Fetch the page
   $curl_handle = curl_init();
@@ -194,7 +195,7 @@ $results .= '<h1>' . $search_url . '</h1>';
     );
 */
 
-    $form['url'] = array(
+/*    $form['url'] = array(
       '#type' => 'textfield',
       '#title' => t('URL of Events Feeds'),
       '#description' => t('Base URL of the feed from Ungerboeck'),
@@ -202,6 +203,7 @@ $results .= '<h1>' . $search_url . '</h1>';
       '#maxlength' => 300,
       '#default_value' => $config['url'],
     );
+*/
 
     $form['format'] = array(
       '#type' => 'textfield',
@@ -238,7 +240,7 @@ $results .= '<h1>' . $search_url . '</h1>';
     //$this->configuration['ungerboeck_servsafe_settings'] = $form_state->getValue('ungerboeck_servsafe_settings');
     $this->configuration['account_number'] = $values['account_number'];
     //$this->configuration['search_string'] = $values['search_string'];
-    $this->configuration['url'] = $values['url'];
+    //$this->configuration['url'] = $values['url'];
     $this->configuration['format'] = $values['format'];
     $this->configuration['title_search'] = $values['title_search'];
     $this->configuration['placement'] = $values['placement'];
@@ -251,7 +253,7 @@ $results .= '<h1>' . $search_url . '</h1>';
     return array(
       'account_number' => '00000150',
       //'search_string' => 'Account eq \'00000150\' and Status eq \'30\' and StartDate ge DateTime\'#TodayDate#\'$orderby=StartDate,StartTime$page_size=4',
-      'url' => 'https://iebms.extension.iastate.edu/RegistrationCalendarWebService/Api/CalendarEvents/GetCalendarEvents',
+      //'url' => 'https://iebms.extension.iastate.edu/RegistrationCalendarWebService/Api/CalendarEvents/GetCalendarEvents',
       'format' => 'l, F j, Y',
       'title_search' => '',
       'placement' => '',

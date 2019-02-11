@@ -40,6 +40,16 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('number_of_blocks'),
     ];
 
+    $form['url'] = [
+      '#type' => 'textfield',
+      '#title' => t('URL of Events Feeds'),
+      '#description' => t('Base URL of the feed from Ungerboeck'),
+      '#size' => 175,
+      '#maxlength' => 300,
+      '#default_value' => $config->get('url'),
+    ];
+
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -59,6 +69,7 @@ class SettingsForm extends ConfigFormBase {
 
     $this->config('ungerboeck_eventlist.settings')
       ->set('number_of_blocks', $form_state->getValue('number_of_blocks'))
+      ->set('url', $form_state->getValue('url'))
       ->save();
   }
 
