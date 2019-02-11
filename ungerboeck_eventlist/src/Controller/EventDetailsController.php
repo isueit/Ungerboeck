@@ -15,8 +15,11 @@ class EventDetailsController extends ControllerBase {
    *   A simple renderable array.
    */
   public function event_details() {
+    $output = 'Hello World<br />';
+
+    $output .= \Drupal::request()->query->get('eventID');
     $element = array(
-      '#markup' => 'Hello, world',
+      '#markup' => $output,
     );
     return $element;
   }
