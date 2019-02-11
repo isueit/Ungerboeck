@@ -1,0 +1,2 @@
+* On URL, verify if it ends with '/' and handle appropriately
+
