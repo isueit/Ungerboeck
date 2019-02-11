@@ -137,8 +137,14 @@ $time = strtotime(substr($event['EVENTSTARTDATE'], 0, $location_date) . substr($
         $results .= $title . '<br/>';
       //}
 
+$results .= $event['ANCHORVENUE'] . '<br />';
       $results .= date($config['format'], $time) . '<br/>';
-$results.= $event['EVENTID'];
+$results.= $event['EVENTID'] . '<br />';
+$results.= $event['WEBADDRESS'] . '<br />';
+$results.= $event['REGDETAILSLIST'][0]['REGISTRATIONSTARTDATE'] . '<br />';
+$results.= $event['REGDETAILSLIST'][0]['REGISTRATIONLINK'] . '<br />';
+$results.= $event['REGDETAILSLIST'][0]['REGISTRATIONENDDATE'] . '<br />';
+
       $results .= '</li>';
     }
     $results .= '</ul>';
