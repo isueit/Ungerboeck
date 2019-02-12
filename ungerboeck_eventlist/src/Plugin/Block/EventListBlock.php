@@ -55,16 +55,10 @@ class EventListBlock extends BlockBase {
     $results = '<ul class="ungerboeck_eventlist ungerboeck_eventlist_' .$id . '">';
 
     foreach ($json_events as $event) {
-
-      $location_date = strpos($event['EVENTSTARTDATE'], ' ');
-      $location_time = strpos($event['EVENTSTARTTIME'], ' ');
-
-      $time = strtotime(substr($event['EVENTSTARTDATE'], 0, $location_date) . substr($event['EVENTSTARTTIME'], $location_time));
-
+      $time = ungerboeck_eventlist_combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']);
       $title = $event['EVENTDESCRIPTION'];
 
       $results .= '<li>';
-
       $results .= '<a href="' . base_path() . 'event_details?eventID=' . $event['EVENTID'] .'&amp;acct=' . $config['account_number'] . '" class="event_title">' . $title . '</a><br/>';
       $results .= '<span class="event_venue">' . $event['ANCHORVENUE'] . '</span><br />';
       $results .= '<span class="event_date">' .date($config['format'], $time) . '</span><br/>';
