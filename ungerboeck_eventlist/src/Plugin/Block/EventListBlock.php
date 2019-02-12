@@ -35,7 +35,7 @@ class EventListBlock extends BlockBase {
     $config = $this->getConfiguration();
     $module_config = \Drupal::config('ungerboeck_eventlist.settings');
 
-    $search_url = $module_config->get('url') . '/02-01-2019/null/null/' . $config['account_number'];
+    $search_url = $module_config->get('url') . '/' . date('m-d-Y') . '/null/null/' . $config['account_number'];
 
     // Fetch the page
     $curl_handle = curl_init();
@@ -113,7 +113,7 @@ $results .= '<h1>' . $search_url . '</h1>';
 
     $form['format_without_time'] = array(
       '#type' => 'textfield',
-      '#title' => t('Date Format'),
+      '#title' => t('Date Only Format'),
       '#description' => t('Use this format when the time is 12:00 am (midnight)'),
       '#default_value' => $config['format_without_time'],
     );
