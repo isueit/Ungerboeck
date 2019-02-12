@@ -55,13 +55,19 @@ class EventListBlock extends BlockBase {
     $results = '<ul class="ungerboeck_eventlist ungerboeck_eventlist_' .$id . '">';
 
     foreach ($json_events as $event) {
-      $time = ungerboeck_eventlist_combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']);
+      $datetime = ungerboeck_eventlist_combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']);
+      if (date('Gi', $datetime) == '0000') {
+        $datetimestr = date($config['format_without_time'], $datetime);
+      } else {
+        $datetimestr = date($config['format_with_time'], $datetime);
+      }
+
       $title = $event['EVENTDESCRIPTION'];
 
       $results .= '<li>';
       $results .= '<a href="' . base_path() . 'event_details?eventID=' . $event['EVENTID'] .'&amp;acct=' . $config['account_number'] . '" class="event_title">' . $title . '</a><br/>';
       $results .= '<span class="event_venue">' . $event['ANCHORVENUE'] . '</span><br />';
-      $results .= '<span class="event_date">' .date($config['format'], $time) . '</span><br/>';
+      $results .= '<span class="event_date">' . $datetimestr . '</span><br/>';
 
       $results .= '</li>';
     }
@@ -98,11 +104,18 @@ $results .= '<h1>' . $search_url . '</h1>';
       '#default_value' => $config['account_number'],
     );
 
-    $form['format'] = array(
+    $form['format_with_time'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Date/Time Format'),
+      '#description' => t('Format of the date, see <a href="http://php.net/manual/en/function.date.php">php date manual</a>'),
+      '#default_value' => $config['format_with_time'],
+    );
+
+    $form['format_without_time'] = array(
       '#type' => 'textfield',
       '#title' => t('Date Format'),
-      '#description' => t('Format of the date, see <a href="http://php.net/manual/en/function.date.php">php date manual</a>'),
-      '#default_value' => $config['format'],
+      '#description' => t('Use this format when the time is 12:00 am (midnight)'),
+      '#default_value' => $config['format_without_time'],
     );
 
     $form['title_search'] = array(
@@ -131,7 +144,8 @@ $results .= '<h1>' . $search_url . '</h1>';
     $values = $form_state->getValues();
 
     $this->configuration['account_number'] = $values['account_number'];
-    $this->configuration['format'] = $values['format'];
+    $this->configuration['format_with_time'] = $values['format_with_time'];
+    $this->configuration['format_without_time'] = $values['format_without_time'];
     $this->configuration['title_search'] = $values['title_search'];
     $this->configuration['placement'] = $values['placement'];
   }
@@ -142,7 +156,8 @@ $results .= '<h1>' . $search_url . '</h1>';
   public function defaultConfiguration() {
     return array(
       'account_number' => '00000150',
-      'format' => 'l, F j, Y',
+      'format_with_time' => 'F j, Y, g:i a',
+      'format_without_time' => 'F j, Y',
       'title_search' => '',
       'placement' => '',
     );
