@@ -65,7 +65,7 @@ class EventListBlock extends BlockBase {
 
       $results .= '<li>';
 
-      $results .= '<a href="' . base_path() . 'event_details?eventID=' . $event['EVENTID'] .'" class="event_title">' . $title . '</a><br/>';
+      $results .= '<a href="' . base_path() . 'event_details?eventID=' . $event['EVENTID'] .'&amp;acct=' . $config['account_number'] . '" class="event_title">' . $title . '</a><br/>';
       $results .= '<span class="event_venue">' . $event['ANCHORVENUE'] . '</span><br />';
       $results .= '<span class="event_date">' .date($config['format'], $time) . '</span><br/>';
 
