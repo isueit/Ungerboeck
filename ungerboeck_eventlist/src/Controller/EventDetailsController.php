@@ -45,6 +45,7 @@ class EventDetailsController extends ControllerBase {
       if ($event['EVENTID'] == $eventID) {
         $title = $event['EVENTDESCRIPTION'];
         $results .= $event['ANCHORVENUE'] . '<br />';
+        $results .= $this->get_registration_info($event) . '<br />';
         break;
       }
     }
@@ -54,6 +55,28 @@ class EventDetailsController extends ControllerBase {
       '#markup' => $results,
     );
     return $element;
+  }
+
+  private function get_registration_info($event) {
+    $output = '';
+    $now = time();
+    $regstartdate = strtotime($event['REGDETAILSLIST'][0]['REGISTRATIONSTARTDATE']);
+    $regenddate = strtotime($event['REGDETAILSLIST'][0]['REGISTRATIONENDDATE']);
+
+    if (empty($event['REGDETAILSLIST'][0]['REGISTRATIONLINK'])) {
+      $output = 'No online registration';
+    } elseif ($now < $regstartdate) {
+      $output = 'Registration opens ' . date('M d, Y', $regstartdate);
+    } elseif ($now > $regenddate) {
+      $output = 'Registration closed ' . date('M d, Y', $regenddate);
+    }
+    else {
+      $output = '<a href="' . $event['REGDETAILSLIST'][0]['REGISTRATIONLINK'] . '">Register online</a>';
+    }
+
+    $output = '<span class="event_detail_registration">' . $output . '</span>';
+  
+    return $output;
   }
 
 }
