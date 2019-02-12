@@ -31,9 +31,15 @@ class EventListBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
+    $count = 0;
     $id = $this->getDerivativeID();
     $config = $this->getConfiguration();
     $module_config = \Drupal::config('ungerboeck_eventlist.settings');
+
+    $max_events = intval($config['max_events']);
+    if ($max_events == 0) {
+      $max_events = PHP_INT_MAX;
+    }
 
     $search_url = $module_config->get('url') . '/' . date('m-d-Y') . '/null/null/' . $config['account_number'];
 
@@ -70,10 +76,15 @@ class EventListBlock extends BlockBase {
       $results .= '<span class="event_date">' . $datetimestr . '</span><br/>';
 
       $results .= '</li>';
+      $count++;
+      if ($count >= $max_events) {
+        break;
+      }
     }
 
     $results .= '</ul>';
 
+$results .= '<h1>' . $max_events . ':*' . $config['max_events'] . '*</h1>';
 $results .= '<h1>' . count($json_events) . '</h1>';
 $results .= '<h1>' . strlen($buffer) . '</h1>';
 $results .= '<h1>' . $search_url . '</h1>';
@@ -96,6 +107,15 @@ $results .= '<h1>' . $search_url . '</h1>';
    */
   public function blockForm($form, FormStateInterface $form_state) {
     $config = $this->getConfiguration();
+
+    $form['max_events'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Maximum Number of Events to display'),
+      '#description' => t('Zero (0) means display all events'),
+      '#size' => 15,
+      '#default_value' => $config['max_events'],
+    );
+
     $form['account_number'] = array(
       '#type' => 'textfield',
       '#title' => t('Account Number'),
@@ -143,6 +163,7 @@ $results .= '<h1>' . $search_url . '</h1>';
   public function blockSubmit($form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
 
+    $this->configuration['max_events'] = $values['max_events'];
     $this->configuration['account_number'] = $values['account_number'];
     $this->configuration['format_with_time'] = $values['format_with_time'];
     $this->configuration['format_without_time'] = $values['format_without_time'];
@@ -155,6 +176,7 @@ $results .= '<h1>' . $search_url . '</h1>';
    */
   public function defaultConfiguration() {
     return array(
+      'max_events' => 0,
       'account_number' => '00000150',
       'format_with_time' => 'F j, Y, g:i a',
       'format_without_time' => 'F j, Y',
