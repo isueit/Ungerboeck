@@ -178,8 +178,8 @@ $results .= '<h1>' . $search_url . '</h1>';
     return array(
       'max_events' => 0,
       'account_number' => '00000150',
-      'format_with_time' => 'F j, Y, g:i a',
-      'format_without_time' => 'F j, Y',
+      'format_with_time' => 'M j, Y, g:i a',
+      'format_without_time' => 'M j, Y',
       'title_search' => '',
       'placement' => '',
     );

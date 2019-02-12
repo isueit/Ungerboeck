@@ -45,6 +45,7 @@ class EventDetailsController extends ControllerBase {
       if ($event['EVENTID'] == $eventID) {
         $title = $event['EVENTDESCRIPTION'];
         $results .= $event['ANCHORVENUE'] . '<br />';
+        $results .= $this->handle_dates($event) . '<br />';
         $results .= $this->get_registration_info($event) . '<br />';
         break;
       }
@@ -74,8 +75,33 @@ class EventDetailsController extends ControllerBase {
       $output = '<a href="' . $event['REGDETAILSLIST'][0]['REGISTRATIONLINK'] . '">Register online</a>';
     }
 
-    $output = '<span class="event_detail_registration">' . $output . '</span>';
+    $output = '<span class="event_details_registration">' . $output . '</span>';
   
+    return $output;
+  }
+
+  private function handle_dates($event) {
+    $output = '';
+    $startdate = ungerboeck_eventlist_combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']);
+    $enddate = ungerboeck_eventlist_combine_date_time($event['EVENTENDDATE'], $event['EVENTENDTIME']);
+
+    $output = date('l, m/d/Y', $startdate);
+    if (date('Gi', $startdate) <> '0000') {
+      $output .= date(' h:i A', $startdate);
+    }
+
+    $output .= ' - ';
+
+    if (date('z', $startdate) <> date('z', $enddate)) {
+      $output .= date(' m/d/y', $enddate);
+    }
+
+    if (date('Gi', $enddate) <> '0000') {
+      $output .= date(' h:i A', $enddate);
+    }
+
+    $output = '<span class="event_details_dates">' . $output . '</span>';
+
     return $output;
   }
 
