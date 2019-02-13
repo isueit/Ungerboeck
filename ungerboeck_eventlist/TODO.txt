@@ -1,4 +1,5 @@
 * On URL, verify if it ends with '/' and handle appropriately
 * In query_detail page, make the query string case insensitive
 * Pull curl stuff into a function
-
+* Better Block Cache, would be nice to run once per day.
+* Export an ical file?
