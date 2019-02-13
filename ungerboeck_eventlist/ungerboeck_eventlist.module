@@ -23,10 +23,3 @@ function ungerboeck_eventlist($route_name, RouteMatchInterface $route_match) {
     default:
   }
 }
-
-/* 
- * Combine separate date and time variables into one variable
- */
-function ungerboeck_eventlist_combine_date_time($datepart, $timepart) {
-  return strtotime(date('m/d/y', strtotime($datepart)) . ' ' . date('H:i', strtotime($timepart)));
-}

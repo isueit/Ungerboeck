@@ -14,6 +14,8 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\node\NodeInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Drupal\ungerboeck_eventlist\Controller\Helpers;
+
 /**
  * Provides a 'EventListBlock' block plugin.
  *
@@ -61,7 +63,7 @@ class EventListBlock extends BlockBase {
     $results = '<ul class="ungerboeck_eventlist ungerboeck_eventlist_' .$id . '">';
 
     foreach ($json_events as $event) {
-      $datetime = ungerboeck_eventlist_combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']);
+      $datetime = Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']);
       if (date('Gi', $datetime) == '0000') {
         $datetimestr = date($config['format_without_time'], $datetime);
       } else {

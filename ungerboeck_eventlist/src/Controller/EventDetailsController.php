@@ -2,6 +2,7 @@
 namespace Drupal\ungerboeck_eventlist\Controller;
 
 use Drupal\Core\Controller\ControllerBase;
+use Drupal\ungerboeck_eventlist\Controller\Helpers;
 
 /**
  * Provides route responses for the ungerboeck_eventlist  module.
@@ -82,8 +83,8 @@ class EventDetailsController extends ControllerBase {
 
   private function handle_dates($event) {
     $output = '';
-    $startdate = ungerboeck_eventlist_combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']);
-    $enddate = ungerboeck_eventlist_combine_date_time($event['EVENTENDDATE'], $event['EVENTENDTIME']);
+    $startdate = Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']);
+    $enddate = Helpers::combine_date_time($event['EVENTENDDATE'], $event['EVENTENDTIME']);
 
     $output = date('l, m/d/Y', $startdate);
     if (date('Gi', $startdate) <> '0000') {
