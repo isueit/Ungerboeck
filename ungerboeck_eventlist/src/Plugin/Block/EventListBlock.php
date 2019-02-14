@@ -194,11 +194,11 @@ $results .= '<h1>' . $search_url . '</h1>';
     );
   }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getCacheMaxAge() {
-        return 0;
-    }
+  /**
+   * {@inheritdoc}
+   */
+  public function getCacheMaxAge() {
+      return 0;
+  }
 
 }
