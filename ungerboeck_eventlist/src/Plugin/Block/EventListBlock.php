@@ -61,17 +61,11 @@ class EventListBlock extends BlockBase {
     $results = '<ul class="ungerboeck_eventlist ungerboeck_eventlist_' .$id . '">';
 
     foreach ($json_events as $event) {
-      $startdatetime = Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']);
-      if (date('Gi', $startdatetime) == '0000') {
-        $startdatetimestr = date($config['format_without_time'], $startdatetime);
-      } else {
-        $startdatetimestr = date($config['format_with_time'], $startdatetime);
-      }
-
-      $title = $event['EVENTDESCRIPTION'];
+      $startdatetimestr = $this->format_date_time(Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']));
+      $title = $this->format_title($event);
 
       $results .= '<li>';
-      $results .= '<a href="' . base_path() . 'event_details?eventID=' . $event['EVENTID'] .'&amp;acct=' . $config['account_number'] . '" class="event_title">' . $title . '</a><br/>';
+      $results .= $title . '<br />';
       $results .= '<span class="event_venue">' . $event['ANCHORVENUE'] . '</span><br />';
       $results .= '<span class="event_date">' . $startdatetimestr . '</span><br/>';
 
@@ -199,6 +193,47 @@ $results .= '<h1>' . $search_url . '</h1>';
    */
   public function getCacheMaxAge() {
       return 0;
+  }
+
+  /**
+   * Format Date
+   */
+  private function format_date_time($datetime) {
+    $config = $this->getConfiguration();
+
+    if (date('Gi', $datetime) == '0000') {
+      $datetimestr = date($config['format_without_time'], $datetime);
+    } else {
+      $datetimestr = date($config['format_with_time'], $datetime);
+    }
+
+    return $datetimestr;
+  }
+
+  /**
+   * Format the title and get it ready to output
+   */
+  private function format_title ($event) {
+    $config = $this->getConfiguration();
+
+    $title = '<span class="event_title">';
+    if ($config['event_details_page']) {
+      $title .= '<a href="' . base_path() . 'event_details?eventID=' . $event['EVENTID'] .'&amp;acct=' . $config['account_number'] . '">' . $event['EVENTDESCRIPTION'] . '</a>';
+    } else {
+      $now = time();
+      $regstartdate = strtotime($event['REGDETAILSLIST'][0]['REGISTRATIONSTARTDATE']);
+      $regenddate = strtotime($event['REGDETAILSLIST'][0]['REGISTRATIONENDDATE']);
+
+      if (!empty($event['REGDETAILSLIST'][0]['REGISTRATIONLINK']) && ($now > $regstartdate && $now < $regenddate)) {
+        $title .= '<a href="' . $event['REGDETAILSLIST'][0]['REGISTRATIONLINK'] . '">' . $event['EVENTDESCRIPTION'] . '</a>';
+      } else {
+        $title .= $event['EVENTDESCRIPTION'];
+      }
+
+    }
+    $title .= '</span>';
+
+    return $title;
   }
 
 }
