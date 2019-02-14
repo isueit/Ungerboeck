@@ -118,6 +118,13 @@ $results .= '<h1>' . $search_url . '</h1>';
       '#default_value' => $config['max_events'],
     );
 
+    $form['event_details_page'] = array(
+      '#type' => 'checkbox',
+      '#title' => t('Link to Details Page'),
+      '#description' => t('When checked, every event title will link to a details page, otherwise, titles will link to registration pages where appropriate'),
+      '#default_value' => $config['event_details_page'],
+    );
+
     $form['account_number'] = array(
       '#type' => 'textfield',
       '#title' => t('Account Number'),
@@ -165,6 +172,7 @@ $results .= '<h1>' . $search_url . '</h1>';
   public function blockSubmit($form, FormStateInterface $form_state) {
     $values = $form_state->getValues();
 
+    $this->configuration['event_details_page'] = $values['event_details_page'];
     $this->configuration['max_events'] = $values['max_events'];
     $this->configuration['account_number'] = $values['account_number'];
     $this->configuration['format_with_time'] = $values['format_with_time'];
@@ -178,6 +186,7 @@ $results .= '<h1>' . $search_url . '</h1>';
    */
   public function defaultConfiguration() {
     return array(
+      'event_details_page' => TRUE,
       'max_events' => 0,
       'account_number' => '00000150',
       'format_with_time' => 'M j, Y, g:i a',
