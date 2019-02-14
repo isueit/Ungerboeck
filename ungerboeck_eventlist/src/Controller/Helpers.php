@@ -11,35 +11,6 @@ use Drupal\ungerboeck_eventlist\Controller\Helpers;
  */
 class Helpers {
 
-  /*
-   * This method may be deleted, I think!
-   */
-  public function handle_dates($event) {
-    $output = '';
-    $startdate = Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']);
-    $enddate = Helpers::combine_date_time($event['EVENTENDDATE'], $event['EVENTENDTIME']);
-
-    $output = date('l, m/d/Y', $startdate);
-    if (date('Gi', $startdate) <> '0000') {
-      $output .= date(' h:i A', $startdate);
-    }
-
-    $output .= ' - ';
-
-    if (date('z', $startdate) <> date('z', $enddate)) {
-      $output .= date(' m/d/y', $enddate);
-    }
-
-    if (date('Gi', $enddate) <> '0000') {
-      $output .= date(' h:i A', $enddate);
-    }
-
-    //$output = '<span class="event_details_dates">' . $output . '</span>';
-    $output = '<span class="event_details_dates">' . 'This should get displayed!' . '</span>';
-
-    return $output;
-  }
-
   /* 
    * Combine separate date and time variables into one variable
    */
