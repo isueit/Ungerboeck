@@ -52,9 +52,7 @@ class EventListBlock extends BlockBase {
     curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 1);
     //curl_setopt($curl_handle, CURLOPT_HEADER, 1);
 
-    $buffer = "<?xml version='1.0' encoding='UTF-8'?>";
-
-    $buffer .= curl_exec($curl_handle);
+    $buffer = curl_exec($curl_handle);
     curl_close($curl_handle);
 
     $json_events = json_decode(strip_tags($buffer), TRUE);
@@ -63,11 +61,11 @@ class EventListBlock extends BlockBase {
     $results = '<ul class="ungerboeck_eventlist ungerboeck_eventlist_' .$id . '">';
 
     foreach ($json_events as $event) {
-      $datetime = Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']);
-      if (date('Gi', $datetime) == '0000') {
-        $datetimestr = date($config['format_without_time'], $datetime);
+      $startdatetime = Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']);
+      if (date('Gi', $startdatetime) == '0000') {
+        $startdatetimestr = date($config['format_without_time'], $startdatetime);
       } else {
-        $datetimestr = date($config['format_with_time'], $datetime);
+        $startdatetimestr = date($config['format_with_time'], $startdatetime);
       }
 
       $title = $event['EVENTDESCRIPTION'];
@@ -75,7 +73,7 @@ class EventListBlock extends BlockBase {
       $results .= '<li>';
       $results .= '<a href="' . base_path() . 'event_details?eventID=' . $event['EVENTID'] .'&amp;acct=' . $config['account_number'] . '" class="event_title">' . $title . '</a><br/>';
       $results .= '<span class="event_venue">' . $event['ANCHORVENUE'] . '</span><br />';
-      $results .= '<span class="event_date">' . $datetimestr . '</span><br/>';
+      $results .= '<span class="event_date">' . $startdatetimestr . '</span><br/>';
 
       $results .= '</li>';
       $count++;
