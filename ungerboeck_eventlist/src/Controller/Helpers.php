@@ -9,7 +9,7 @@ use Drupal\ungerboeck_eventlist\Controller\Helpers;
  * multiple classes within the ungerboeck_eventlist module.
  *
  */
-class Helpers extends ControllerBase {
+class Helpers {
 
   /*
    * This method may be deleted, I think!
