@@ -43,7 +43,7 @@ class EventListBlock extends BlockBase {
       $max_events = PHP_INT_MAX;
     }
 
-    $search_url = $module_config->get('url') . '/' . date('m-d-Y') . '/null/null/' . $config['account_number'];
+    $search_url = Helpers::trim_slash($module_config->get('url')) . '/' . date('m-d-Y') . '/null/null/' . $config['account_number'];
 
     // Fetch the page
     $curl_handle = curl_init();

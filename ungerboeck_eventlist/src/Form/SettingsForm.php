@@ -4,6 +4,7 @@ namespace Drupal\ungerboeck_eventlist\Form;
 
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\ungerboeck_eventlist\Controller\Helpers;
 
 /**
  * Class SettingsForm.
@@ -69,7 +70,7 @@ class SettingsForm extends ConfigFormBase {
 
     $this->config('ungerboeck_eventlist.settings')
       ->set('number_of_blocks', $form_state->getValue('number_of_blocks'))
-      ->set('url', $form_state->getValue('url'))
+      ->set('url', Helpers::trim_slash($form_state->getValue('url')))
       ->save();
   }
 

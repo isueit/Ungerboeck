@@ -17,5 +17,12 @@ class Helpers {
   public function combine_date_time($datepart, $timepart) {
     return strtotime(date('m/d/y', strtotime($datepart)) . ' ' . date('H:i', strtotime($timepart)));
   }
+
+  /*
+   * Trim trailing slashes
+   */
+  public function trim_slash($inputstr) {
+    return rtrim($inputstr, '/');
+  }
 }
 

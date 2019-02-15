@@ -24,7 +24,7 @@ class EventDetailsController extends ControllerBase {
     $module_config = \Drupal::config('ungerboeck_eventlist.settings');
 
     $account_number = $config['account_number'];
-    $search_url = $module_config->get('url') . '/' . date('m-d-Y') . '/null/null/' . $account_number;
+    $search_url = Helpers::trim_slash($module_config->get('url')) . '/' . date('m-d-Y') . '/null/null/' . $account_number;
 
 
     // Fetch the page
