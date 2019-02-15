@@ -43,17 +43,7 @@ class EventListBlock extends BlockBase {
       $max_events = PHP_INT_MAX;
     }
 
-    $search_url = Helpers::trim_slash($module_config->get('url')) . '/' . date('m-d-Y') . '/null/null/' . $config['account_number'];
-
-    // Fetch the page
-    $curl_handle = curl_init();
-    curl_setopt($curl_handle, CURLOPT_URL, $search_url);
-    curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 1);
-    //curl_setopt($curl_handle, CURLOPT_HEADER, 1);
-
-    $buffer = curl_exec($curl_handle);
-    curl_close($curl_handle);
+    $buffer = Helpers::read_ungerboeck_file();
 
     $json_events = json_decode(strip_tags($buffer), TRUE);
     $json_events = array_reverse($json_events);
@@ -69,6 +59,10 @@ class EventListBlock extends BlockBase {
       $results .= '<span class="event_venue">' . $event['ANCHORVENUE'] . '</span><br />';
       $results .= '<span class="event_date">' . $startdatetimestr . '</span><br/>';
 
+if (!empty($event['QUALTRICSID'])) {
+  $results .= $event['QUALTRICSID'] . '<br />';
+}
+
       $results .= '</li>';
       $count++;
       if ($count >= $max_events) {
@@ -77,7 +71,6 @@ class EventListBlock extends BlockBase {
     }
 
     $results .= '</ul>';
-
 $results .= '<h1>' . $max_events . ':*' . $config['max_events'] . '*</h1>';
 $results .= '<h1>' . count($json_events) . '</h1>';
 $results .= '<h1>' . strlen($buffer) . '</h1>';
@@ -218,7 +211,7 @@ $results .= '<h1>' . $search_url . '</h1>';
 
     $title = '<span class="event_title">';
     if ($config['event_details_page']) {
-      $title .= '<a href="' . base_path() . 'event_details?eventID=' . $event['EVENTID'] .'&amp;acct=' . $config['account_number'] . '">' . $event['EVENTDESCRIPTION'] . '</a>';
+      $title .= '<a href="' . base_path() . 'event_details?eventID=' . $event['EVENTID'] . '">' . $event['EVENTDESCRIPTION'] . '</a>';
     } else {
       $now = time();
       $regstartdate = strtotime($event['REGDETAILSLIST'][0]['REGISTRATIONSTARTDATE']);

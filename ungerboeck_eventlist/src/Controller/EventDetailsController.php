@@ -20,25 +20,9 @@ class EventDetailsController extends ControllerBase {
     $title = 'Sorry, event not found';
 
     $eventID = intval(\Drupal::request()->query->get('eventID'));
-    $account_number  = \Drupal::request()->query->get('acct');
     $module_config = \Drupal::config('ungerboeck_eventlist.settings');
 
-    $account_number = $config['account_number'];
-    $search_url = Helpers::trim_slash($module_config->get('url')) . '/' . date('m-d-Y') . '/null/null/' . $account_number;
-
-
-    // Fetch the page
-    $curl_handle = curl_init();
-    curl_setopt($curl_handle, CURLOPT_URL, $search_url);
-    curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 1);
-    //curl_setopt($curl_handle, CURLOPT_HEADER, 1);
-
-    /*$buffer = "<?xml version='1.0' encoding='UTF-8'?>";*/
-
-    $buffer .= curl_exec($curl_handle);
-    curl_close($curl_handle);
-
+    $buffer = Helpers::read_ungerboeck_file();
     $json_events = json_decode(strip_tags($buffer), TRUE);
     $json_events = array_reverse($json_events);
 

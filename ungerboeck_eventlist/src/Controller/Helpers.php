@@ -24,5 +24,54 @@ class Helpers {
   public function trim_slash($inputstr) {
     return rtrim($inputstr, '/');
   }
+
+
+  /*
+   * Return the contents of the file that is storing the events from Ungerboeck
+   */
+  public function read_ungerboeck_file() {
+    $returnstr = '';
+    $path_to_file = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/ungerboeck_eventlist/ungerboeck.json';
+
+    if (!file_exists($path_to_file) || (date('z', time()) <> date('z', filemtime($path_to_file)))) {
+      Helpers::create_ungerboeck_file();
+    }
+
+    $myfile = fopen($path_to_file, 'r') or die('Unable to open file!');
+    $returnstr = fread($myfile, filesize($path_to_file));
+    fclose($myfile);
+    return $returnstr;
+  }
+
+  /*
+   * Get the list of events from Ungerboeck, and save it in the files folder
+   */
+  public function create_ungerboeck_file() {
+    $module_config = \Drupal::config('ungerboeck_eventlist.settings');
+
+    $path_to_folder = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/ungerboeck_eventlist';
+    $path_to_file = $path_to_folder . '/ungerboeck.json';
+
+    if (!file_exists($path_to_folder)) {
+      $filespath = \Drupal::service('file_system')->mkdir($path_to_folder);
+    }
+
+    $search_url = Helpers::trim_slash($module_config->get('url')) . '/' . date('m-d-Y') . '/null/null/' . '00000150';
+
+    // Fetch the page
+    $curl_handle = curl_init();
+    curl_setopt($curl_handle, CURLOPT_URL, $search_url);
+    curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 1);
+    //curl_setopt($curl_handle, CURLOPT_HEADER, 1);
+
+    $buffer = curl_exec($curl_handle);
+    curl_close($curl_handle);
+
+    $myfile = fopen($path_to_file, 'w') or die('Unable to open file');
+    fwrite($myfile, $buffer);
+    fclose($myfile);
+  }
+
 }
 
