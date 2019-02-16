@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\ungerboeck_eventlist\Controller\Helpers;
 
 /**
  * Implements hook_help().
@@ -22,4 +23,11 @@ function ungerboeck_eventlist($route_name, RouteMatchInterface $route_match) {
 
     default:
   }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function ungerboeck_eventlist_cron() {
+  Helpers::create_ungerboeck_file();
 }
