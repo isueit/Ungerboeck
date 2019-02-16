@@ -74,7 +74,6 @@ if (!empty($event['QUALTRICSID'])) {
 $results .= '<h1>' . $max_events . ':*' . $config['max_events'] . '*</h1>';
 $results .= '<h1>' . count($json_events) . '</h1>';
 $results .= '<h1>' . strlen($buffer) . '</h1>';
-$results .= '<h1>' . $search_url . '</h1>';
 
     return [
       '#markup' => $this->t($results),

@@ -14,14 +14,14 @@ class Helpers {
   /* 
    * Combine separate date and time variables into one variable
    */
-  public function combine_date_time($datepart, $timepart) {
+  public static function combine_date_time($datepart, $timepart) {
     return strtotime(date('m/d/y', strtotime($datepart)) . ' ' . date('H:i', strtotime($timepart)));
   }
 
   /*
    * Trim trailing slashes
    */
-  public function trim_slash($inputstr) {
+  public static function trim_slash($inputstr) {
     return rtrim($inputstr, '/');
   }
 
@@ -29,7 +29,7 @@ class Helpers {
   /*
    * Return the contents of the file that is storing the events from Ungerboeck
    */
-  public function read_ungerboeck_file() {
+  public static function read_ungerboeck_file() {
     $returnstr = '';
     $path_to_file = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/ungerboeck_eventlist/ungerboeck.json';
 
@@ -46,7 +46,7 @@ class Helpers {
   /*
    * Get the list of events from Ungerboeck, and save it in the files folder
    */
-  public function create_ungerboeck_file() {
+  public static function create_ungerboeck_file() {
     $module_config = \Drupal::config('ungerboeck_eventlist.settings');
 
     $path_to_folder = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/ungerboeck_eventlist';
