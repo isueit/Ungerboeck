@@ -1,0 +1,16 @@
+<?php
+/***
+  * @file
+  * Install, update, and uninstall functions for ungerboeck_eventlist
+  */
+
+/**
+ * Implements hook_uninstall().
+ *
+ * Delete the ungerboeck_eventlist folder from the files folder
+ */
+function ungerboeck_eventlist_uninstall() {
+  $path_to_folder = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/ungerboeck_eventlist';
+  file_unmanaged_delete_recursive($path_to_folder);
+}
+
