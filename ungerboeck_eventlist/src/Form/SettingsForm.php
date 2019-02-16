@@ -50,6 +50,15 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('url'),
     ];
 
+    $form['account_number'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Account Number'),
+      '#description' => t('Account number of unit within the Ungerboeck system, Human Sciences is 00000150'),
+      '#size' => 15,
+      '#default_value' => $config->get('account_number'),
+    );
+
+
 
     return parent::buildForm($form, $form_state);
   }
@@ -71,6 +80,7 @@ class SettingsForm extends ConfigFormBase {
     $this->config('ungerboeck_eventlist.settings')
       ->set('number_of_blocks', $form_state->getValue('number_of_blocks'))
       ->set('url', Helpers::trim_slash($form_state->getValue('url')))
+      ->set('account_number', $form_state->getValue('account_number'))
       ->save();
   }
 

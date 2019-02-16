@@ -56,7 +56,7 @@ class Helpers {
       $filespath = \Drupal::service('file_system')->mkdir($path_to_folder);
     }
 
-    $search_url = Helpers::trim_slash($module_config->get('url')) . '/' . date('m-d-Y') . '/null/null/' . '00000150';
+    $search_url = Helpers::trim_slash($module_config->get('url')) . '/' . date('m-d-Y') . '/null/null/' . $module_config->get('account_number');
 
     // Fetch the page
     $curl_handle = curl_init();

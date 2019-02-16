@@ -110,14 +110,6 @@ $results .= '<h1>' . $search_url . '</h1>';
       '#default_value' => $config['event_details_page'],
     );
 
-    $form['account_number'] = array(
-      '#type' => 'textfield',
-      '#title' => t('Account Number'),
-      '#description' => t('Account number of unit within the Ungerboeck system, Human Sciences is 00000150'),
-      '#size' => 15,
-      '#default_value' => $config['account_number'],
-    );
-
     $form['format_with_time'] = array(
       '#type' => 'textfield',
       '#title' => t('Date/Time Format'),
@@ -159,7 +151,6 @@ $results .= '<h1>' . $search_url . '</h1>';
 
     $this->configuration['event_details_page'] = $values['event_details_page'];
     $this->configuration['max_events'] = $values['max_events'];
-    $this->configuration['account_number'] = $values['account_number'];
     $this->configuration['format_with_time'] = $values['format_with_time'];
     $this->configuration['format_without_time'] = $values['format_without_time'];
     $this->configuration['title_search'] = $values['title_search'];
@@ -173,7 +164,6 @@ $results .= '<h1>' . $search_url . '</h1>';
     return array(
       'event_details_page' => TRUE,
       'max_events' => 0,
-      'account_number' => '00000150',
       'format_with_time' => 'M j, Y, g:i a',
       'format_without_time' => 'M j, Y',
       'title_search' => '',
