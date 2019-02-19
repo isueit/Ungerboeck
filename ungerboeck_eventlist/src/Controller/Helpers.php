@@ -33,7 +33,7 @@ class Helpers {
     $returnstr = '';
     $path_to_file = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/ungerboeck_eventlist/ungerboeck.json';
 
-    if (!file_exists($path_to_file) || (date('z', time()) <> date('z', filemtime($path_to_file)))) {
+    if (!file_exists($path_to_file) || (date('z', time()) <> date('z', filemtime($path_to_file))) || filesize($path_to_file) == 0) {
       Helpers::create_ungerboeck_file();
     }
 
@@ -68,9 +68,11 @@ class Helpers {
     $buffer = curl_exec($curl_handle);
     curl_close($curl_handle);
 
-    $myfile = fopen($path_to_file, 'w') or die('Unable to open file');
-    fwrite($myfile, $buffer);
-    fclose($myfile);
+    if (strlen($buffer) > 0) {
+      $myfile = fopen($path_to_file, 'w') or die('Unable to open file');
+      fwrite($myfile, $buffer);
+      fclose($myfile);
+    }
   }
 
 }
