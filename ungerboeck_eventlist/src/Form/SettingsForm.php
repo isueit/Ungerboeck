@@ -58,6 +58,24 @@ class SettingsForm extends ConfigFormBase {
       '#default_value' => $config->get('account_number'),
     );
 
+    $form['hs_qualtrics_token'] = [
+      '#type' => 'textfield',
+      '#title' => t('Qualtrics Token for Human Sciences Survey'),
+      '#description' => t('Get value from your Qualtrics Account'),
+      '#size' => 175,
+      '#maxlength' => 300,
+      '#default_value' => $config->get('hs_qualtrics_token'),
+    ];
+
+    $form['hs_qualtrics_surveyID'] = [
+      '#type' => 'textfield',
+      '#title' => t('ID of Qualtrics Survey for Human Sciences'),
+      '#description' => t('Get value from your Qualtrics Account'),
+      '#size' => 175,
+      '#maxlength' => 300,
+      '#default_value' => $config->get('hs_qualtrics_surveyID'),
+    ];
+
 
 
     return parent::buildForm($form, $form_state);
@@ -81,6 +99,8 @@ class SettingsForm extends ConfigFormBase {
       ->set('number_of_blocks', $form_state->getValue('number_of_blocks'))
       ->set('url', Helpers::trim_slash($form_state->getValue('url')))
       ->set('account_number', $form_state->getValue('account_number'))
+      ->set('hs_qualtrics_token', $form_state->getValue('hs_qualtrics_token'))
+      ->set('hs_qualtrics_surveyID', $form_state->getValue('hs_qualtrics_surveyID'))
       ->save();
   }
 

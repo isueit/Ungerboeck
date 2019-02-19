@@ -1,3 +1,5 @@
 number_of_blocks: 1
 url: https://iebms.extension.iastate.edu/RegistrationCalendarWebService/Api/CalendarEvents/GetCalendarEvents
 account_number: '00000150'
+hs_qualtrics_token: gGxz25pEJRyDpqq9SkEl3yKB7gqn9Cluk1mwmFCt
+hs_qualtrics_surveyID: SV_02EBgd3tsKDrvnL

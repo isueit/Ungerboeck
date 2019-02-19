@@ -4,3 +4,4 @@
 * Export an ical file?
 * Put drupal log messages into the module, ie uninstall, got ungerboeck.json, got qualtrics.json, etc.
 * Maybe a drush command to get .json files
+* Figure out a better way to handle Human Sciences specific stuff like Qualtrics information, maybe another module, maybe plugin"
