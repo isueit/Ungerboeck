@@ -30,4 +30,5 @@ function ungerboeck_eventlist($route_name, RouteMatchInterface $route_match) {
  */
 function ungerboeck_eventlist_cron() {
   Helpers::create_ungerboeck_file();
+  Helpers::hs_create_qualtrics_file();
 }
