@@ -23,10 +23,10 @@ class EventDetailsController extends ControllerBase {
     $module_config = \Drupal::config('ungerboeck_eventlist.settings');
 
     $buffer = Helpers::read_ungerboeck_file();
-    $json_events = json_decode(strip_tags($buffer), TRUE);
-    $json_events = array_reverse($json_events);
+    $events_from_ungerboeck = json_decode(strip_tags($buffer), TRUE);
+    $events_from_ungerboeck = array_reverse($events_from_ungerboeck);
 
-    foreach ($json_events as $event) {
+    foreach ($events_from_ungerboeck as $event) {
       if ($event['EVENTID'] == $eventID) {
         $title = $event['EVENTDESCRIPTION'];
         $results .= $event['ANCHORVENUE'] . '<br />';
