@@ -29,10 +29,14 @@ class EventDetailsController extends ControllerBase {
     foreach ($events_from_ungerboeck as $event) {
       if ($event['EVENTID'] == $eventID) {
         $title = $event['EVENTDESCRIPTION'];
-        $results .= $event['ANCHORVENUE'] . '<br />';
+
+//if (empty($event['QUALTRICSID'])) {
         $results .= $this->handle_dates($event) . '<br />';
+        $results .= $event['ANCHORVENUE'] . '<br />';
         $results .= $this->get_registration_info($event) . '<br />';
         $results .= $event['EVENTTYPECODE'] . '<br />';
+  //continue;
+//}
 
 if (!empty($event['QUALTRICSID'])) {
 $results .= '<hr />';
@@ -41,9 +45,14 @@ $results .= '<hr />';
   $events_from_qualtrics['responses'] = array_reverse($events_from_qualtrics['responses']);
   foreach ($events_from_qualtrics['responses'] as $response) {
     if ($response['values']['_recordId'] == $event['QUALTRICSID']) {
-$results .= $response['values']['QID80_2'] . '<br />';
-$results .= $response['values']['QID80_4'] . '<br />';
-$results .= $response['values']['QID80_8'] . '<br />';
+
+// Found the right Qualtrics Response;
+if ($event['EVENTTYPECODE'] == 'NONPRIORITY') {
+  $results .= $this->handle_nonpriority_events($response);
+}
+else {
+  $results .= $this->handle_priority_events($event, $response);
+}
 $results .= '<hr />';
 
 //$results .= implode('<br />', $response['values']);
@@ -113,6 +122,58 @@ else
     $output = '<span class="event_details_dates">' . $output . '</span>';
 
     return $output;
+  }
+
+  private function handle_nonpriority_events($response) {
+    $results = '';
+    $results .= $response['values']['QID80_3'] . '<br />';
+    $results .= $response['values']['QID80_5'] . '<br />';
+    $results .= $response['values']['QID80_2'] . '<br />';
+    $results .= $response['values']['QID80_4'] . '<br />';
+    $results .= $response['values']['QID80_8'] . '<br />';
+
+    return $results;
+  }
+
+  private function handle_priority_events($event, $response) {
+    $results = '';
+    if (!empty($response['values']['QID8_1'])) {
+      $results .= $response['values']['QID8_1'] . '<br />';
+      $results .= $response['values']['QID8_2'] . '<br />';
+      $results .= $response['values']['QID8_3'] . ', ';
+      $results .= $response['values']['QID8_4'] . ' ';
+      $results .= $response['values']['QID8_5'] . '<br />';
+    }
+    if (!empty($response['values']['QID105_5'])) {
+      $results .= $response['values']['QID105_5'] . '<br />';
+      $results .= 'Instructor:<br />';
+      $results .= $response['values']['QID105_4'] . '<br />';
+      $results .= $response['values']['QID105_8'] . '<br />';
+    }
+    if (!empty($response['values']['QID19_1'])) {
+      $results .= 'Contact Info:<br />';
+      $results .= $response['values']['QID19_1'] . '<br />';
+      if (!empty($response['values']['QID19_2'])) { $results .= $response['values']['QID19_2'] . '<br />'; }
+      if (!empty($response['values']['QID19_3'])) { $results .= $response['values']['QID19_3'] . '<br />'; }
+    }
+    if (!empty($response['values']['QID10_1'])) {
+      $results .= 'Instructor:<br />';
+      $results .= $response['values']['QID10_1'] . '<br />';
+      if (!empty($response['values']['QID10_2'])) { $results .= $response['values']['QID10_2'] . '<br />'; }
+      if (!empty($response['values']['QID10_3'])) { $results .= $response['values']['QID10_3'] . '<br />'; }
+    }
+    if (!empty($response['values']['QID74_1_1'])) {
+      $results .= 'Sessions:<br />';
+      $i = 1;
+      while (!empty($response['values']['QID74_1_' . $i])) {
+        $results .= $response['values']['QID74_1_' . $i] . ' ';
+        $results .= $response['values']['QID74_2_' . $i] . ' - ';
+        $results .= $response['values']['QID74_3_' . $i] . '<br />';
+        $i++;
+      }
+    }
+
+    return $results;
   }
 
 }

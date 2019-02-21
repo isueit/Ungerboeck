@@ -51,6 +51,10 @@ class EventListBlock extends BlockBase {
     $results = '<ul class="ungerboeck_eventlist ungerboeck_eventlist_' .$id . '">';
 
     foreach ($json_events as $event) {
+//if (empty($event['QUALTRICSID']) || $event['EVENTTYPECODE'] == 'NONPRIORITY') {
+if (empty($event['QUALTRICSID'])) {
+//  continue;
+}
       $startdatetimestr = $this->format_date_time(Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']));
       $title = $this->format_title($event);
 
