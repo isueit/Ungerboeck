@@ -32,6 +32,7 @@ class EventDetailsController extends ControllerBase {
         $results .= $event['ANCHORVENUE'] . '<br />';
         $results .= $this->handle_dates($event) . '<br />';
         $results .= $this->get_registration_info($event) . '<br />';
+        $results .= $event['EVENTTYPECODE'] . '<br />';
 
 if (!empty($event['QUALTRICSID'])) {
 $results .= '<hr />';

@@ -62,6 +62,7 @@ class EventListBlock extends BlockBase {
 if (!empty($event['QUALTRICSID'])) {
   $results .= $event['QUALTRICSID'] . '<br />';
 }
+$results .= $event['EVENTTYPECODE'] . '<br />';
 
       $results .= '</li>';
       $count++;
