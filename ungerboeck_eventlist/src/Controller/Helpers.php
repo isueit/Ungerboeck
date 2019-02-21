@@ -38,7 +38,7 @@ class Helpers {
       Helpers::create_ungerboeck_file();
     }
 
-    $myfile = fopen($path_to_file, 'r') or die('Unable to open file!');
+    $myfile = fopen($path_to_file, 'r') or die('Unable to open file!' . $path_to_file);
     $returnstr = fread($myfile, filesize($path_to_file));
     fclose($myfile);
     return $returnstr;
@@ -70,7 +70,7 @@ class Helpers {
     curl_close($curl_handle);
 
     if (strlen($buffer) > 0) {
-      $myfile = fopen($path_to_file, 'w') or die('Unable to open file');
+      $myfile = fopen($path_to_file, 'w') or die('Unable to open file' . $path_to_file);
       fwrite($myfile, $buffer);
       fclose($myfile);
     }
@@ -88,7 +88,7 @@ class Helpers {
       Helpers::hs_create_qualtrics_file();
     }
 
-    $myfile = fopen($path_to_file, 'r') or die('Unable to open file!');
+    $myfile = fopen($path_to_file, 'r') or die('Unable to open file!' . $path_to_file);
     $returnstr = fread($myfile, filesize($path_to_file));
     fclose($myfile);
     return $returnstr;
@@ -147,7 +147,7 @@ class Helpers {
       $zipfile = $zip->getNameIndex(0);
       $zip->extractTo($path_to_folder, $zipfile);
       $zip->close();
-      rename($path_to_folder . '/' . $zipfile, $path_to_folder . '/' . 'qualtrics.json');
+      rename($path_to_folder . '/' . $zipfile, $path_to_file);
     }
 
     \Drupal::service('file_system')->unlink($tmpfile);

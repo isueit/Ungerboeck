@@ -32,6 +32,28 @@ class EventDetailsController extends ControllerBase {
         $results .= $event['ANCHORVENUE'] . '<br />';
         $results .= $this->handle_dates($event) . '<br />';
         $results .= $this->get_registration_info($event) . '<br />';
+
+if (!empty($event['QUALTRICSID'])) {
+$results .= 'Looking for Qualtrics record...<br />';
+  $buffer = Helpers::hs_read_qualtrics_file();
+  $events_from_qualtrics = json_decode(strip_tags($buffer), TRUE);
+  $events_from_qualtrics['responses'] = array_reverse($events_from_qualtrics['responses']);
+  foreach ($events_from_qualtrics['responses'] as $response) {
+    if ($response['values']['_recordId'] == $event['QUALTRICSID']) {
+$results .= $response['values']['_recordId'] . '<br />';
+$results .= $response['values']['QID80_2'] . '<br />';
+$results .= $response['values']['QID80_4'] . '<br />';
+$results .= $response['values']['QID80_8'] . '<br />';
+
+//$results .= implode('<br />', $response['values']);
+$results .= '<br />Raw Data:<br />';
+$results .= str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['values']))))))) . '<br />';
+      break;
+    }
+  }
+}
+else
+{ $results .= 'No Qualtrics ID given<br />'; }
         break;
       }
     }
