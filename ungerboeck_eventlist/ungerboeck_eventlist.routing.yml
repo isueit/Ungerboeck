@@ -12,7 +12,7 @@ ungerboeck_eventlist.admin_settings_form:
 
 
 ungerboeck_eventlist.event_details:
-  path: '/event_details'
+  path: '/event_details/{eventID}'
   defaults:
     _controller: '\Drupal\ungerboeck_eventlist\Controller\EventDetailsController::event_details'
     _title: 'Details of Event'

@@ -15,11 +15,11 @@ class EventDetailsController extends ControllerBase {
    * @return array
    *   A simple renderable array.
    */
-  public function event_details() {
+  public function event_details($eventID) {
     $results = '';
     $title = 'Sorry, event not found';
 
-    $eventID = intval(\Drupal::request()->query->get('eventID'));
+    $eventID = intval($eventID);
     $module_config = \Drupal::config('ungerboeck_eventlist.settings');
 
     $buffer = Helpers::read_ungerboeck_file();

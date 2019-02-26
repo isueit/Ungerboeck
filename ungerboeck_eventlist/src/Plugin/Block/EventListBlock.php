@@ -205,7 +205,7 @@ $results .= '<h1>' . strlen($buffer) . '</h1>';
 
     $title = '<span class="event_title">';
     if ($config['event_details_page']) {
-      $title .= '<a href="' . base_path() . 'event_details?eventID=' . $event['EVENTID'] . '">' . $event['EVENTDESCRIPTION'] . '</a>';
+      $title .= '<a href="' . base_path() . 'event_details/' . $event['EVENTID'] . '">' . $event['EVENTDESCRIPTION'] . '</a>';
     } else {
       $now = time();
       $regstartdate = strtotime($event['REGDETAILSLIST'][0]['REGISTRATIONSTARTDATE']);
