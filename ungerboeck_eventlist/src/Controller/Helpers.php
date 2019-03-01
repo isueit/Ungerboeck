@@ -60,14 +60,7 @@ class Helpers {
     $search_url = Helpers::trim_slash($module_config->get('url')) . '/' . date('m-d-Y') . '/null/null/' . $module_config->get('account_number');
 
     // Fetch the page
-    $curl_handle = curl_init();
-    curl_setopt($curl_handle, CURLOPT_URL, $search_url);
-    curl_setopt($curl_handle, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($curl_handle, CURLOPT_CONNECTTIMEOUT, 1);
-    //curl_setopt($curl_handle, CURLOPT_HEADER, 1);
-
-    $buffer = curl_exec($curl_handle);
-    curl_close($curl_handle);
+    $buffer = Helpers::curl_call($search_url);
 
     if (strlen($buffer) > 0) {
       $myfile = fopen($path_to_file, 'w') or die('Unable to open file' . $path_to_file);
