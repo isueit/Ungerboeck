@@ -30,42 +30,42 @@ class EventDetailsController extends ControllerBase {
       if ($event['EVENTID'] == $eventID) {
         $title = $event['EVENTDESCRIPTION'];
 
-//if (empty($event['QUALTRICSID'])) {
-        $results .= $this->handle_dates($event) . '<br />';
-        $results .= $event['ANCHORVENUE'] . '<br />';
-        $results .= $this->get_registration_info($event) . '<br />';
-        $results .= $event['EVENTTYPECODE'] . '<br />';
-  //continue;
-//}
+        //if (empty($event['QUALTRICSID'])) {
+          $results .= $this->handle_dates($event) . '<br />';
+          $results .= $event['ANCHORVENUE'] . '<br />';
+          $results .= $this->get_registration_info($event) . '<br />';
+          $results .= $event['EVENTTYPECODE'] . '<br />';
+          //continue;
+        //}
 
-if (!empty($event['QUALTRICSID'])) {
-$results .= '<hr />';
-  $buffer = Helpers::hs_read_qualtrics_file();
-  $events_from_qualtrics = json_decode(strip_tags($buffer), TRUE);
-  $events_from_qualtrics['responses'] = array_reverse($events_from_qualtrics['responses']);
-  foreach ($events_from_qualtrics['responses'] as $response) {
-    if ($response['values']['_recordId'] == $event['QUALTRICSID']) {
+        if (!empty($event['QUALTRICSID'])) {
+          $results .= '<hr />';
+          $buffer = Helpers::hs_read_qualtrics_file();
+          $events_from_qualtrics = json_decode(strip_tags($buffer), TRUE);
+          $events_from_qualtrics['responses'] = array_reverse($events_from_qualtrics['responses']);
+          foreach ($events_from_qualtrics['responses'] as $response) {
+            if ($response['values']['_recordId'] == $event['QUALTRICSID']) {
 
-// Found the right Qualtrics Response;
-if ($event['EVENTTYPECODE'] == 'NONPRIORITY') {
-  $results .= $this->handle_nonpriority_events($response);
-}
-else {
-  $results .= $this->handle_priority_events($event, $response);
-}
-$results .= '<hr />';
+              // Found the right Qualtrics Response;
+              if ($event['EVENTTYPECODE'] == 'NONPRIORITY') {
+                $results .= $this->handle_nonpriority_events($response);
+              }
+              else {
+                $results .= $this->handle_priority_events($event, $response);
+              }
+              $results .= '<hr />';
 
-//$results .= implode('<br />', $response['values']);
-$results .= '<br /><strong>Raw Data:</strong><br />';
-$results .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['values']))))))))))) . '<br />';
-$results .= '<br />';
-$results .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['labels']))))))))))) . '<br />';
-      break;
-    }
-  }
-}
-else
-{ $results .= 'No Qualtrics ID given<br />'; }
+              //$results .= implode('<br />', $response['values']);
+              $results .= '<br /><strong>Raw Data:</strong><br />';
+              $results .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['values']))))))))))) . '<br />';
+              $results .= '<br />';
+              $results .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['labels']))))))))))) . '<br />';
+              break;
+            }
+          }
+        }
+        else
+        { $results .= 'No Qualtrics ID given<br />'; }
         break;
       }
     }

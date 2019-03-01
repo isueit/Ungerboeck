@@ -51,10 +51,6 @@ class EventListBlock extends BlockBase {
     $results = PHP_EOL . '<ul class="ungerboeck_eventlist ungerboeck_eventlist_' .$id . '">' . PHP_EOL;
 
     foreach ($json_events as $event) {
-//if (empty($event['QUALTRICSID']) || $event['EVENTTYPECODE'] == 'NONPRIORITY') {
-if (empty($event['QUALTRICSID'])) {
-//  continue;
-}
       $startdatetimestr = $this->format_date_time(Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']));
       $title = $this->format_title($event);
 
@@ -63,10 +59,11 @@ if (empty($event['QUALTRICSID'])) {
       $results .= '    <span class="event_venue">' . $event['ANCHORVENUE'] . '</span><br />' . PHP_EOL;
       $results .= '    <span class="event_date">' . $startdatetimestr . '</span><br/>' . PHP_EOL;
 
-if (!empty($event['QUALTRICSID'])) {
-  $results .= '    ' . $event['QUALTRICSID'] . '<br />' . PHP_EOL;
-}
-$results .= '    ' . $event['EVENTTYPECODE'] . '<br />' . PHP_EOL;
+      /* This is test code that should go away before we go live */
+      if (!empty($event['QUALTRICSID'])) {
+        $results .= '    ' . $event['QUALTRICSID'] . '<br />' . PHP_EOL;
+      }
+      $results .= '    ' . $event['EVENTTYPECODE'] . '<br />' . PHP_EOL;
 
       $results .= '  </li>' . PHP_EOL;
       $count++;
