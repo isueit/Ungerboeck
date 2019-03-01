@@ -28,18 +28,21 @@ class EventDetailsController extends ControllerBase {
 
     foreach ($events_from_ungerboeck as $event) {
       if ($event['EVENTID'] == $eventID) {
+
+// ** Delete all lines with $extra_html before going live. This output is just for testing, not production **
+$extra_html = '<hr />';
+$extra_html .= '<br /><strong>Raw Data:</strong><br />';
+
         $title = $event['EVENTDESCRIPTION'];
+        $results .= $this->handle_dates($event) . '<br />';
 
-        //if (empty($event['QUALTRICSID'])) {
-          $results .= $this->handle_dates($event) . '<br />';
+        if (empty($event['QUALTRICSID'])) {
           $results .= $event['ANCHORVENUE'] . '<br />';
-          $results .= $this->get_registration_info($event) . '<br />';
-          $results .= $event['EVENTTYPECODE'] . '<br />';
-          //continue;
-        //}
+// ** Delete all lines with $extra_html before going live. This output is just for testing, not production **
+$extra_html .= $event['EVENTTYPECODE'] . '<br />';
+$extra_html .= 'No Qualtrics ID given<br />';
+        } else {
 
-        if (!empty($event['QUALTRICSID'])) {
-          $results .= '<hr />';
           $buffer = Helpers::hs_read_qualtrics_file();
           $events_from_qualtrics = json_decode(strip_tags($buffer), TRUE);
           $events_from_qualtrics['responses'] = array_reverse($events_from_qualtrics['responses']);
@@ -53,19 +56,24 @@ class EventDetailsController extends ControllerBase {
               else {
                 $results .= $this->handle_priority_events($event, $response);
               }
-              $results .= '<hr />';
 
-              //$results .= implode('<br />', $response['values']);
-              $results .= '<br /><strong>Raw Data:</strong><br />';
-              $results .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['values']))))))))))) . '<br />';
-              $results .= '<br />';
-              $results .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['labels']))))))))))) . '<br />';
+// ** Delete all lines with $extra_html before going live. This output is just for testing, not production **
+$extra_html .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['values']))))))))))) . '<br />';
+$extra_html .= '<br />';
+$extra_html .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['labels']))))))))))) . '<br />';
+
               break;
             }
           }
         }
-        else
-        { $results .= 'No Qualtrics ID given<br />'; }
+        $results .= $this->get_registration_info($event) . '<br />';
+
+// ** Delete all lines with $extra_html before going live. This output is just for testing, not production **
+$extra_html .= '<br />';
+$extra_html .= str_replace('%5B', '[', str_replace('%5D', ']', str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($event))))))))))))) . '<br />';
+$results .= $extra_html;
+
+        // We've found the correct event, quit looking for the right event
         break;
       }
     }
@@ -126,7 +134,7 @@ class EventDetailsController extends ControllerBase {
 
   private function handle_nonpriority_events($response) {
     $results = '';
-    $results .= $response['values']['QID80_3'] . '<br />';
+    //$results .= $response['values']['QID80_3'] . '<br />';
     $results .= $response['values']['QID80_5'] . '<br />';
     $results .= $response['values']['QID80_2'] . '<br />';
     $results .= $response['values']['QID80_4'] . '<br />';
