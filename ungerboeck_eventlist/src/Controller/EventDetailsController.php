@@ -136,7 +136,11 @@ else
   }
 
   private function handle_priority_events($event, $response) {
+    $descriptions = json_decode(Helpers::hs_read_descriptions_file(), TRUE);
+
     $results = '';
+    $results .= str_replace(' target="_blank"', '', $descriptions[$response['values']['QID1']]) . '<br />';
+
     if (!empty($response['values']['QID8_1'])) {
       $results .= $response['values']['QID8_1'] . '<br />';
       $results .= $response['values']['QID8_2'] . '<br />';

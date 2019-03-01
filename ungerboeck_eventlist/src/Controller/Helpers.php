@@ -146,6 +146,70 @@ class Helpers {
     \Drupal::service('file_system')->unlink($tmpfile);
   }
 
+
+  /*
+   * Return the contents of the file that is storing the events from Ungerboeck
+   */
+  public static function hs_read_descriptions_file() {
+    $returnstr = '';
+    $path_to_file = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/ungerboeck_eventlist/hs_descriptions.json';
+
+    if (!file_exists($path_to_file) || (date('z', time()) <> date('z', filemtime($path_to_file))) || filesize($path_to_file) == 0) {
+      Helpers::hs_create_descriptions_file();
+    }
+
+    $myfile = fopen($path_to_file, 'r') or die('Unable to open file!' . $path_to_file);
+    $returnstr = fread($myfile, filesize($path_to_file));
+    fclose($myfile);
+    return $returnstr;
+  }
+
+
+  /**
+   * Get the survey file from Qualtrics, and save it in the files folder
+   */
+  public static function hs_create_descriptions_file() {
+    $module_config = \Drupal::config('ungerboeck_eventlist.settings');
+    if (empty($module_config->get('hs_qualtrics_token')) || empty($module_config->get('hs_qualtrics_surveyID'))) {
+      return;
+    }
+
+    $path_to_folder = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/ungerboeck_eventlist';
+    $path_to_file = $path_to_folder . '/hs_descriptions.json';
+
+    if (!file_exists($path_to_folder)) {
+      $filespath = \Drupal::service('file_system')->mkdir($path_to_folder);
+    }
+
+    $baseURL = 'https://iastate.ca1.qualtrics.com/API/v3/surveys/' . $module_config->get('hs_qualtrics_surveyID');
+    $headers = array(
+      'x-api-token: ' . $module_config->get('hs_qualtrics_token'), 
+      'content-type: application/json',
+    );
+
+    $result = Helpers::curl_call($baseURL, $headers);
+    $json = json_decode($result, TRUE);
+    $questions_array = array();
+
+    foreach($json['result']['questions'] as $question) {
+      if (($choiceposition = strpos($question['questionText'], 'QID1/ChoiceDescription')) !== FALSE) {
+        $newline_position = strpos($question['questionText'], PHP_EOL);
+
+        $description = substr($question['questionText'], $newline_position + 1);
+        $descID = strval(intval(substr($question['questionText'], $choiceposition + 23, 10)));
+
+        $questions_array[$descID] = $description;
+      }
+    }
+
+    if (count($questions_array) > 0) {
+      $myfile = fopen($path_to_file, 'w') or die('Unable to open file' . $path_to_file);
+      fwrite($myfile, json_encode($questions_array));
+      fclose($myfile);
+    }
+
+  }
+
   /**
    * Function to make a curl call. There are other options that can be added
    * using curl_setopt for debugging purposes. You'll need to do a search for
