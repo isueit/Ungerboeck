@@ -48,7 +48,7 @@ class EventListBlock extends BlockBase {
     $json_events = json_decode(strip_tags($buffer), TRUE);
     $json_events = array_reverse($json_events);
 
-    $results = '<ul class="ungerboeck_eventlist ungerboeck_eventlist_' .$id . '">';
+    $results = PHP_EOL . '<ul class="ungerboeck_eventlist ungerboeck_eventlist_' .$id . '">' . PHP_EOL;
 
     foreach ($json_events as $event) {
 //if (empty($event['QUALTRICSID']) || $event['EVENTTYPECODE'] == 'NONPRIORITY') {
@@ -58,27 +58,24 @@ if (empty($event['QUALTRICSID'])) {
       $startdatetimestr = $this->format_date_time(Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']));
       $title = $this->format_title($event);
 
-      $results .= '<li>';
-      $results .= $title . '<br />';
-      $results .= '<span class="event_venue">' . $event['ANCHORVENUE'] . '</span><br />';
-      $results .= '<span class="event_date">' . $startdatetimestr . '</span><br/>';
+      $results .= '  <li>' . PHP_EOL;
+      $results .= '    ' . $title . '<br />' . PHP_EOL;
+      $results .= '    <span class="event_venue">' . $event['ANCHORVENUE'] . '</span><br />' . PHP_EOL;
+      $results .= '    <span class="event_date">' . $startdatetimestr . '</span><br/>' . PHP_EOL;
 
 if (!empty($event['QUALTRICSID'])) {
-  $results .= $event['QUALTRICSID'] . '<br />';
+  $results .= '    ' . $event['QUALTRICSID'] . '<br />' . PHP_EOL;
 }
-$results .= $event['EVENTTYPECODE'] . '<br />';
+$results .= '    ' . $event['EVENTTYPECODE'] . '<br />' . PHP_EOL;
 
-      $results .= '</li>';
+      $results .= '  </li>' . PHP_EOL;
       $count++;
       if ($count >= $max_events) {
         break;
       }
     }
 
-    $results .= '</ul>';
-$results .= '<h1>' . $max_events . ':*' . $config['max_events'] . '*</h1>';
-$results .= '<h1>' . count($json_events) . '</h1>';
-$results .= '<h1>' . strlen($buffer) . '</h1>';
+    $results .= '</ul>' . PHP_EOL;
 
     return [
       '#markup' => $this->t($results),
