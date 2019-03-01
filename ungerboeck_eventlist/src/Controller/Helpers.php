@@ -146,6 +146,13 @@ class Helpers {
     \Drupal::service('file_system')->unlink($tmpfile);
   }
 
+  /**
+   * Function to make a curl call. There are other options that can be added
+   * using curl_setopt for debugging purposes. You'll need to do a search for
+   * what's available.
+   *
+   * Return value is the results of making the curl call.
+   */
   public static function curl_call($url, $headers = NULL, $postfields = NULL) {
     //open connection
     $ch = curl_init();
