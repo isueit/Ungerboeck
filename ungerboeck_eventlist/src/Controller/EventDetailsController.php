@@ -17,6 +17,7 @@ class EventDetailsController extends ControllerBase {
    */
   public function event_details($eventID) {
     $results = '';
+    $results .= PHP_EOL . '<div class="ungerboeck_eventlist ungerboeck_eventlist_details">' . PHP_EOL;
     $title = 'Sorry, event not found';
 
     $eventID = intval($eventID);
@@ -31,13 +32,13 @@ class EventDetailsController extends ControllerBase {
 
 // ** Delete all lines with $extra_html before going live. This output is just for testing, not production **
 $extra_html = '<hr />';
-$extra_html .= '<br /><strong>Raw Data:</strong><br />';
+$extra_html .= '<strong>Raw Data:</strong><br />';
 
         $title = $event['EVENTDESCRIPTION'];
-        $results .= $this->handle_dates($event) . '<br />';
+        $results .= $this->handle_dates($event) . PHP_EOL;
 
         if (empty($event['QUALTRICSID'])) {
-          $results .= $event['ANCHORVENUE'] . '<br />';
+          $results .= '  <div class="event_location">' . $event['ANCHORVENUE'] . '</div>' . PHP_EOL;
 // ** Delete all lines with $extra_html before going live. This output is just for testing, not production **
 $extra_html .= $event['EVENTTYPECODE'] . '<br />';
 $extra_html .= 'No Qualtrics ID given<br />';
@@ -66,7 +67,7 @@ $extra_html .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29'
             }
           }
         }
-        $results .= $this->get_registration_info($event) . '<br />';
+        $results .= $this->get_registration_info($event) . PHP_EOL;
 
 // ** Delete all lines with $extra_html before going live. This output is just for testing, not production **
 $extra_html .= '<br />';
@@ -77,6 +78,7 @@ $results .= $extra_html;
         break;
       }
     }
+    $results .= PHP_EOL . '</div>' . PHP_EOL;
 
     $element = array(
       '#title' => $title,
@@ -102,7 +104,7 @@ $results .= $extra_html;
       $output = '<a href="' . $event['REGDETAILSLIST'][0]['REGISTRATIONLINK'] . '">Register online</a>';
     }
 
-    $output = '<span class="event_details_registration">' . $output . '</span>';
+    $output = '  <div class="event_details_registration">' . $output . '</div>';
   
     return $output;
   }
@@ -127,60 +129,67 @@ $results .= $extra_html;
       $output .= date(' h:i A', $enddate);
     }
 
-    $output = '<span class="event_details_dates">' . $output . '</span>';
+    $output = '  <div class="event_details_dates">' . $output . '</div>';
 
     return $output;
   }
 
   private function handle_nonpriority_events($response) {
     $results = '';
-    //$results .= $response['values']['QID80_3'] . '<br />';
-    $results .= $response['values']['QID80_5'] . '<br />';
-    $results .= $response['values']['QID80_2'] . '<br />';
-    $results .= $response['values']['QID80_4'] . '<br />';
-    $results .= $response['values']['QID80_8'] . '<br />';
+    $results .= '  <div class="event_location">' . $response['values']['QID80_5'] . '</div>' . PHP_EOL;
+    $results .= '  <div class="event_description">' . $response['values']['QID80_2'] . '</div>' . PHP_EOL;
+    $results .= '  <div class="event_contact_label">Contact Info:</div>' . PHP_EOL;
+    $results .= '  <div class="event_contact">' . $response['values']['QID80_4'] . '</div>' . PHP_EOL;
+    $results .= '  <div class="event_contact_email"><a href="mailto://' . $response['values']['QID80_8'] . '">' . $response['values']['QID80_8'] . '</a></div>' . PHP_EOL;
 
     return $results;
   }
 
   private function handle_priority_events($event, $response) {
-    $descriptions = json_decode(Helpers::hs_read_descriptions_file(), TRUE);
+    $list_of_descriptions = json_decode(Helpers::hs_read_descriptions_file(), TRUE);
 
     $results = '';
-    $results .= str_replace(' target="_blank"', '', $descriptions[$response['values']['QID1']]) . '<br />';
+    $mydescription = '  <div class="event_description">' . str_replace(' target="_blank"', '', $list_of_descriptions[$response['values']['QID1']]) . '</div>';
 
     if (!empty($response['values']['QID8_1'])) {
-      $results .= $response['values']['QID8_1'] . '<br />';
-      $results .= $response['values']['QID8_2'] . '<br />';
-      $results .= $response['values']['QID8_3'] . ', ';
-      $results .= $response['values']['QID8_4'] . ' ';
-      $results .= $response['values']['QID8_5'] . '<br />';
+      $results .= '  <div class="event_address">' . $response['values']['QID8_1'] . '<br />' . PHP_EOL;
+      if (!empty($response['values']['QID8_2'])) { $results .= '    ' . $response['values']['QID8_2'] . '<br />' . PHP_EOL; }
+      if (!empty($response['values']['QID8_3'])) { $results .= '    ' . $response['values']['QID8_3'] . ', '; }
+      if (!empty($response['values']['QID8_4'])) { $results .= $response['values']['QID8_4'] . ' '; }
+      if (!empty($response['values']['QID8_5'])) { $results .= $response['values']['QID8_5']; }
+      $results .= '  </div>' . PHP_EOL;
+      $results .= $mydescription . PHP_EOL;
     }
+
     if (!empty($response['values']['QID105_5'])) {
-      $results .= $response['values']['QID105_5'] . '<br />';
-      $results .= 'Instructor:<br />';
-      $results .= $response['values']['QID105_4'] . '<br />';
-      $results .= $response['values']['QID105_8'] . '<br />';
+      $results .= '  <div class="event_location">' . $response['values']['QID105_5'] . '</div>' . PHP_EOL;
+      $results .= $mydescription . PHP_EOL;
+      $results .= '  <div class="event_instructor_label">' . 'Instructor:</div>' . PHP_EOL;
+      $results .= '  <div class="event_instructor">' . $response['values']['QID105_4'] . '</div>' . PHP_EOL;
+      $results .= '  <div class="event_instructor_email"><a href="mailto://' . $response['values']['QID105_8'] . '">' . $response['values']['QID105_8'] . '</a></div>' . PHP_EOL;
     }
+
     if (!empty($response['values']['QID19_1'])) {
-      $results .= 'Contact Info:<br />';
-      $results .= $response['values']['QID19_1'] . '<br />';
-      if (!empty($response['values']['QID19_2'])) { $results .= $response['values']['QID19_2'] . '<br />'; }
-      if (!empty($response['values']['QID19_3'])) { $results .= $response['values']['QID19_3'] . '<br />'; }
+      $results .= '  <div class="event_contact_label">Contact Info:</div>' . PHP_EOL;
+      $results .= '  <div class="event_contact">' . $response['values']['QID19_1'] . '</div>' . PHP_EOL;
+      if (!empty($response['values']['QID19_2'])) { $results .= '  <div class="event_contact_email"><a href="' . $response['values']['QID19_2'] . '">' . $response['values']['QID19_2'] . '</a></div>' . PHP_EOL; }
+      if (!empty($response['values']['QID19_3'])) { $results .= '  <div class="event_contact_phone">' . $response['values']['QID19_3'] . '</div>' . PHP_EOL; }
     }
+
     if (!empty($response['values']['QID10_1'])) {
-      $results .= 'Instructor:<br />';
-      $results .= $response['values']['QID10_1'] . '<br />';
-      if (!empty($response['values']['QID10_2'])) { $results .= $response['values']['QID10_2'] . '<br />'; }
-      if (!empty($response['values']['QID10_3'])) { $results .= $response['values']['QID10_3'] . '<br />'; }
+      $results .= '  <div class="event_instructor_label">Instructor:</div>' . PHP_EOL;
+      $results .= '  <div class="event_instructor">' . $response['values']['QID10_1'] . '</div>' . PHP_EOL;
+      if (!empty($response['values']['QID10_2'])) { $results .= '  <div class="event_instructor_email"><a href="' . $response['values']['QID10_2'] . '">' . $response['values']['QID10_2'] . '</a></div>' . PHP_EOL; }
+      if (!empty($response['values']['QID10_3'])) { $results .= '  <div class="event_instructor_phone">' . $response['values']['QID10_3'] . '</div>' . PHP_EOL; }
     }
+
     if (!empty($response['values']['QID74_1_1'])) {
-      $results .= 'Sessions:<br />';
+      $results .= '  <div class="event_sessions_label">Sessions:</div>' . PHP_EOL;
       $i = 1;
       while (!empty($response['values']['QID74_1_' . $i])) {
-        $results .= $response['values']['QID74_1_' . $i] . ' ';
+        $results .= '  <div class="event_session">' . $response['values']['QID74_1_' . $i] . ' ';
         $results .= $response['values']['QID74_2_' . $i] . ' - ';
-        $results .= $response['values']['QID74_3_' . $i] . '<br />';
+        $results .= $response['values']['QID74_3_' . $i]. '</div>' . PHP_EOL;
         $i++;
       }
     }

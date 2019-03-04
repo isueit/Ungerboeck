@@ -55,9 +55,9 @@ class EventListBlock extends BlockBase {
       $title = $this->format_title($event);
 
       $results .= '  <li>' . PHP_EOL;
-      $results .= '    ' . $title . '<br />' . PHP_EOL;
-      $results .= '    <span class="event_venue">' . $event['ANCHORVENUE'] . '</span><br />' . PHP_EOL;
-      $results .= '    <span class="event_date">' . $startdatetimestr . '</span><br/>' . PHP_EOL;
+      $results .= '    ' . $title . PHP_EOL;
+      $results .= '    <div class="event_venue">' . $event['ANCHORVENUE'] . '</div>' . PHP_EOL;
+      $results .= '    <div class="event_startdate">' . $startdatetimestr . '</div>' . PHP_EOL;
 
       /* This is test code that should go away before we go live */
       if (!empty($event['QUALTRICSID'])) {
@@ -197,7 +197,7 @@ class EventListBlock extends BlockBase {
   private function format_title ($event) {
     $config = $this->getConfiguration();
 
-    $title = '<span class="event_title">';
+    $title = '<div class="event_title">';
     if ($config['event_details_page']) {
       $title .= '<a href="' . base_path() . 'event_details/' . $event['EVENTID'] . '">' . $event['EVENTDESCRIPTION'] . '</a>';
     } else {
@@ -212,7 +212,7 @@ class EventListBlock extends BlockBase {
       }
 
     }
-    $title .= '</span>';
+    $title .= '</div>';
 
     return $title;
   }
