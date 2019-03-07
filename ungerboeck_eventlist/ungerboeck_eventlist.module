@@ -29,7 +29,31 @@ function ungerboeck_eventlist($route_name, RouteMatchInterface $route_match) {
  * Implements hook_cron().
  */
 function ungerboeck_eventlist_cron() {
+  ungerboeck_eventlist_get_files();
+}
+
+/**
+ * Implements hook_cache_flush().
+ */
+function ungerboeck_eventlist_cache_flush() {
+  ungerboeck_eventlist_delete_files();
+}
+
+/**
+ * Implements hook_rebuild().
+ */
+function ungerboeck_eventlist_rebuild() {
+  ungerboeck_eventlist_get_files();
+}
+
+function ungerboeck_eventlist_get_files() {
   Helpers::create_ungerboeck_file();
   Helpers::hs_create_qualtrics_file();
   Helpers::hs_create_descriptions_file();
+}
+
+function ungerboeck_eventlist_delete_files() {
+  $path_to_folder = \Drupal::service('file_system')->realpath(file_default_scheme() . "://") . '/ungerboeck_eventlist';
+  file_unmanaged_delete_recursive($path_to_folder);
+
 }
