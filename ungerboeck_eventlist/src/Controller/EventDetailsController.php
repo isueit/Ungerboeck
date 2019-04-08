@@ -27,6 +27,7 @@ class EventDetailsController extends ControllerBase {
     $events_from_ungerboeck = json_decode(strip_tags($buffer), TRUE);
     $events_from_ungerboeck = array_reverse($events_from_ungerboeck);
 
+
     foreach ($events_from_ungerboeck as $event) {
       if ($event['EVENTID'] == $eventID) {
 
@@ -45,7 +46,7 @@ $extra_html .= 'No Qualtrics ID given<br />';
         } else {
 
           $buffer = Helpers::hs_read_qualtrics_file();
-          $events_from_qualtrics = json_decode(strip_tags($buffer), TRUE);
+          $events_from_qualtrics = json_decode($buffer, TRUE);
           $events_from_qualtrics['responses'] = array_reverse($events_from_qualtrics['responses']);
           foreach ($events_from_qualtrics['responses'] as $response) {
             if ($response['values']['_recordId'] == $event['QUALTRICSID']) {
@@ -62,6 +63,10 @@ $extra_html .= 'No Qualtrics ID given<br />';
 $extra_html .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['values']))))))))))) . '<br />';
 $extra_html .= '<br />';
 $extra_html .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['labels']))))))))))) . '<br />';
+//$extra_html .= '<br />';
+//$extra_html .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['displayedFields']))))))))))) . '<br />';
+//$extra_html .= '<br />';
+//$extra_html .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['displayedValues']))))))))))) . '<br />';
 
               break;
             }

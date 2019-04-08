@@ -45,7 +45,7 @@ class EventListBlock extends BlockBase {
 
     $buffer = Helpers::read_ungerboeck_file();
 
-    $json_events = json_decode(strip_tags($buffer), TRUE);
+    $json_events = json_decode($buffer, TRUE);
     $json_events = array_reverse($json_events);
 
     $results = PHP_EOL . '<ul class="ungerboeck_eventlist ungerboeck_eventlist_' .$id . '">' . PHP_EOL;
