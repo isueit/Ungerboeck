@@ -42,17 +42,22 @@ class EventListBlock extends BlockBase {
     if ($max_events == 0) {
       $max_events = PHP_INT_MAX;
     }
+$node = \Drupal::routeMatch()->getParameter('node');
+$search_term = strtolower($node->field_ungerboeck_search_term->value);
+
 
     $buffer = Helpers::read_ungerboeck_file();
 
     $json_events = json_decode($buffer, TRUE);
     $json_events = array_reverse($json_events);
 
-    $results = PHP_EOL . '<ul class="ungerboeck_eventlist ungerboeck_eventlist_' .$id . '">' . PHP_EOL;
+$results = '<p>Search Term: ' . $search_term . '</p>' . PHP_EOL;
+    $results .= PHP_EOL . '<ul class="ungerboeck_eventlist ungerboeck_eventlist_' .$id . '">' . PHP_EOL;
 
     foreach ($json_events as $event) {
-      $startdatetimestr = $this->format_date_time(Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']));
       $title = $this->format_title($event);
+if (!empty($search_term) && strpos(strtolower($title), $search_term) !== false) {
+      $startdatetimestr = $this->format_date_time(Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']));
 
       $results .= '  <li>' . PHP_EOL;
       $results .= '    ' . $title . PHP_EOL;
@@ -70,6 +75,7 @@ class EventListBlock extends BlockBase {
       if ($count >= $max_events) {
         break;
       }
+}
     }
 
     $results .= '</ul>' . PHP_EOL;
