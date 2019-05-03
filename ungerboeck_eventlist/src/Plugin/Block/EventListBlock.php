@@ -33,6 +33,9 @@ class EventListBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
+    // Do NOT cache a page with this block on it.
+    \Drupal::service('page_cache_kill_switch')->trigger();
+ 
     $count = 0;
     $id = $this->getDerivativeID();
     $config = $this->getConfiguration();
