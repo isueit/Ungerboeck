@@ -42,8 +42,17 @@ class EventListBlock extends BlockBase {
     if ($max_events == 0) {
       $max_events = PHP_INT_MAX;
     }
-$node = \Drupal::routeMatch()->getParameter('node');
-$search_term = strtolower($node->field_ungerboeck_search_term->value);
+
+    $node = \Drupal::routeMatch()->getParameter('node');
+    $string_of_search_terms = $this->build_search_string($node->field_ungerboeck_search_term->value, $config['title_search']);
+
+    if (empty($string_of_search_terms)) {
+      $show_all_events = TRUE;
+      $search_terms = array ();
+    } else {
+      $show_all_events = FALSE;
+      $search_terms = explode('|', $string_of_search_terms);
+    }
 
 
     $buffer = Helpers::read_ungerboeck_file();
@@ -51,31 +60,42 @@ $search_term = strtolower($node->field_ungerboeck_search_term->value);
     $json_events = json_decode($buffer, TRUE);
     $json_events = array_reverse($json_events);
 
-$results = '<p>Search Term: ' . $search_term . '</p>' . PHP_EOL;
     $results .= PHP_EOL . '<ul class="ungerboeck_eventlist ungerboeck_eventlist_' .$id . '">' . PHP_EOL;
 
     foreach ($json_events as $event) {
       $title = $this->format_title($event);
-if (!empty($search_term) && strpos(strtolower($title), $search_term) !== false) {
-      $startdatetimestr = $this->format_date_time(Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']));
-
-      $results .= '  <li>' . PHP_EOL;
-      $results .= '    ' . $title . PHP_EOL;
-      $results .= '    <div class="event_venue">' . $event['ANCHORVENUE'] . '</div>' . PHP_EOL;
-      $results .= '    <div class="event_startdate">' . $startdatetimestr . '</div>' . PHP_EOL;
-
-      /* This is test code that should go away before we go live */
-      if (!empty($event['QUALTRICSID'])) {
-        $results .= '    ' . $event['QUALTRICSID'] . '<br />' . PHP_EOL;
+      $display_event = FALSE;
+      if ($show_all_events) {
+        $display_event = TRUE;
+      } else {
+        foreach($search_terms as $search_term) {
+          //$search_term = trim($search_term);
+          if (!empty($search_term) &&  strpos(strtolower($title), $search_term) !== false) {
+            $display_event = TRUE;
+          }
+        }
       }
-      $results .= '    ' . $event['EVENTTYPECODE'] . '<br />' . PHP_EOL;
 
-      $results .= '  </li>' . PHP_EOL;
-      $count++;
-      if ($count >= $max_events) {
-        break;
-      }
+      if ($display_event) {
+        $startdatetimestr = $this->format_date_time(Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']));
+
+        $results .= '  <li>' . PHP_EOL;
+        $results .= '    ' . $title . PHP_EOL;
+        $results .= '    <div class="event_venue">' . $event['ANCHORVENUE'] . '</div>' . PHP_EOL;
+        $results .= '    <div class="event_startdate">' . $startdatetimestr . '</div>' . PHP_EOL;
+
+/* This is test code that should go away before we go live */
+if (!empty($event['QUALTRICSID'])) {
+  $results .= '    ' . $event['QUALTRICSID'] . '<br />' . PHP_EOL;
 }
+$results .= '    ' . $event['EVENTTYPECODE'] . '<br />' . PHP_EOL;
+
+        $results .= '  </li>' . PHP_EOL;
+        $count++;
+        if ($count >= $max_events) {
+          break;
+        }
+      }
     }
 
     $results .= '</ul>' . PHP_EOL;
@@ -221,6 +241,24 @@ if (!empty($search_term) && strpos(strtolower($title), $search_term) !== false) 
     $title .= '</div>';
 
     return $title;
+  }
+
+  /**
+   * Combine two search strings into 1
+   */
+  private function build_search_string($str1, $str2) {
+    $return_string = '';
+    $str1 = trim(strtolower($str1));
+    $str2 = trim(strtolower($str2));
+    if (!empty($str1) && !empty($str2)) {
+      $return_string = $str1 . '|' . $str2;
+    } elseif (!empty($str1)) {
+      $return_string = $str1;
+    } else {
+      $return_string = $str2;
+    }
+
+    return $return_string;
   }
 
 }
