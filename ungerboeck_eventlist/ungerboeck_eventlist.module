@@ -43,7 +43,7 @@ function ungerboeck_eventlist_cache_flush() {
  * Implements hook_rebuild().
  */
 function ungerboeck_eventlist_rebuild() {
-  ungerboeck_eventlist_get_files();
+  //ungerboeck_eventlist_get_files();
 }
 
 function ungerboeck_eventlist_get_files() {
