@@ -48,8 +48,7 @@ class EventListBlock extends BlockBase {
     }
 
     $node = \Drupal::routeMatch()->getParameter('node');
-    $string_of_search_terms = $this->build_search_string(!empty($node->field_ungerboeck_search_term->value) ?: '', $config['title_search']);
-
+    $string_of_search_terms = $this->build_search_string(!empty($node->field_ungerboeck_search_term->value) ? $node->field_ungerboeck_search_term->value : '', $config['title_search']);
     if (empty($string_of_search_terms)) {
       $show_all_events = TRUE;
       $search_terms = array ();
