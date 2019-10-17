@@ -88,10 +88,10 @@ class EventListBlock extends BlockBase {
         $results .= '    <div class="event_startdate">' . $startdatetimestr . '</div>' . PHP_EOL;
 
 /* This is test code that should go away before we go live */
-if (!empty($event['QUALTRICSID'])) {
-  $results .= '    ' . $event['QUALTRICSID'] . '<br />' . PHP_EOL;
-}
-$results .= '    ' . $event['EVENTTYPECODE'] . '<br />' . PHP_EOL;
+//if (!empty($event['QUALTRICSID'])) {
+//  $results .= '    ' . $event['QUALTRICSID'] . '<br />' . PHP_EOL;
+//}
+//$results .= '    ' . $event['EVENTTYPECODE'] . '<br />' . PHP_EOL;
 
         $results .= '  </li>' . PHP_EOL;
         $count++;
