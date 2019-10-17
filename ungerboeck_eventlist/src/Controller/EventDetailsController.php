@@ -32,8 +32,8 @@ class EventDetailsController extends ControllerBase {
       if ($event['EVENTID'] == $eventID) {
 
 // ** Delete all lines with $extra_html before going live. This output is just for testing, not production **
-$extra_html = '<hr />';
-$extra_html .= '<strong>Raw Data:</strong><br />';
+//$extra_html = '<hr />';
+//$extra_html .= '<strong>Raw Data:</strong><br />';
 
         $title = $event['EVENTDESCRIPTION'];
         $results .= $this->handle_dates($event) . PHP_EOL;
@@ -41,8 +41,8 @@ $extra_html .= '<strong>Raw Data:</strong><br />';
         if (empty($event['QUALTRICSID'])) {
           $results .= '  <div class="event_location">' . $event['ANCHORVENUE'] . '</div>' . PHP_EOL;
 // ** Delete all lines with $extra_html before going live. This output is just for testing, not production **
-$extra_html .= $event['EVENTTYPECODE'] . '<br />';
-$extra_html .= 'No Qualtrics ID given<br />';
+//$extra_html .= $event['EVENTTYPECODE'] . '<br />';
+//$extra_html .= 'No Qualtrics ID given<br />';
         } else {
 
           $buffer = Helpers::hs_read_qualtrics_file();
@@ -60,9 +60,9 @@ $extra_html .= 'No Qualtrics ID given<br />';
               }
 
 // ** Delete all lines with $extra_html before going live. This output is just for testing, not production **
-$extra_html .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['values']))))))))))) . '<br />';
-$extra_html .= '<br />';
-$extra_html .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['labels']))))))))))) . '<br />';
+//$extra_html .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['values']))))))))))) . '<br />';
+//$extra_html .= '<br />';
+//$extra_html .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['labels']))))))))))) . '<br />';
 //$extra_html .= '<br />';
 //$extra_html .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($response['displayedFields']))))))))))) . '<br />';
 //$extra_html .= '<br />';
@@ -75,9 +75,9 @@ $extra_html .= str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29'
         $results .= $this->get_registration_info($event) . PHP_EOL;
 
 // ** Delete all lines with $extra_html before going live. This output is just for testing, not production **
-$extra_html .= '<br />';
-$extra_html .= str_replace('%5B', '[', str_replace('%5D', ']', str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($event))))))))))))) . '<br />';
-$results .= $extra_html;
+//$extra_html .= '<br />';
+//$extra_html .= str_replace('%5B', '[', str_replace('%5D', ']', str_replace('%0A', ' ', str_replace('%28', '(', str_replace('%29', ')', str_replace('%2C', ',', str_replace('+', ' ', str_replace('%40', '@', str_replace('%2F', '/', str_replace('%3A', ':', str_replace('=', ' => ', str_replace('&', '<br />', http_build_query($event))))))))))))) . '<br />';
+//$results .= $extra_html;
 
         // We've found the correct event, quit looking for the right event
         break;
