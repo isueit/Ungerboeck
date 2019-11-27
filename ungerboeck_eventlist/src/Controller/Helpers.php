@@ -145,6 +145,7 @@ class Helpers {
       $zip->close();
       rename($path_to_folder . '/' . $zipfile, $path_to_file);
       \Drupal::service('file_system')->chmod($path_to_file, 0666);
+      \Drupal::service('file_system')->chmod($path_to_folder . '/Event Registration ', 0777);
     }
 
     \Drupal::service('file_system')->unlink($tmpfile);
