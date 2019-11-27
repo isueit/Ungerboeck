@@ -37,6 +37,7 @@ function ungerboeck_eventlist_cron() {
  */
 function ungerboeck_eventlist_cache_flush() {
   ungerboeck_eventlist_delete_files();
+  ungerboeck_eventlist_get_files();
 }
 
 /**

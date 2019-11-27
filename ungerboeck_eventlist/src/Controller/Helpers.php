@@ -55,6 +55,7 @@ class Helpers {
 
     if (!file_exists($path_to_folder)) {
       $filespath = \Drupal::service('file_system')->mkdir($path_to_folder);
+      \Drupal::service('file_system')->chmod($path_to_folder, 0777);
     }
 
     $search_url = Helpers::trim_slash($module_config->get('url')) . '/' . date('m-d-Y') . '/null/null/' . $module_config->get('account_number');
@@ -66,6 +67,7 @@ class Helpers {
       $myfile = fopen($path_to_file, 'w') or die('Unable to open file' . $path_to_file);
       fwrite($myfile, $buffer);
       fclose($myfile);
+      \Drupal::service('file_system')->chmod($path_to_file, 0666);
     }
   }
 
@@ -102,6 +104,7 @@ class Helpers {
 
     if (!file_exists($path_to_folder)) {
       $filespath = \Drupal::service('file_system')->mkdir($path_to_folder);
+      \Drupal::service('file_system')->chmod($path_to_folder, 0777);
     }
 
     $progressStatus = 'inProgress';
@@ -141,6 +144,7 @@ class Helpers {
       $zip->extractTo($path_to_folder, $zipfile);
       $zip->close();
       rename($path_to_folder . '/' . $zipfile, $path_to_file);
+      \Drupal::service('file_system')->chmod($path_to_file, 0666);
     }
 
     \Drupal::service('file_system')->unlink($tmpfile);
@@ -179,6 +183,7 @@ class Helpers {
 
     if (!file_exists($path_to_folder)) {
       $filespath = \Drupal::service('file_system')->mkdir($path_to_folder);
+      \Drupal::service('file_system')->chmod($path_to_folder, 0777);
     }
 
     $baseURL = 'https://iastate.ca1.qualtrics.com/API/v3/surveys/' . $module_config->get('hs_qualtrics_surveyID');
@@ -206,6 +211,7 @@ class Helpers {
       $myfile = fopen($path_to_file, 'w') or die('Unable to open file' . $path_to_file);
       fwrite($myfile, json_encode($questions_array));
       fclose($myfile);
+      \Drupal::service('file_system')->chmod($path_to_file, 0666);
     }
 
   }
