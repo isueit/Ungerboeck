@@ -33,6 +33,8 @@ class EventListBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
+    global $base_url;
+
     // Do NOT cache a page with this block on it.
     \Drupal::service('page_cache_kill_switch')->trigger();
  
@@ -48,7 +50,14 @@ class EventListBlock extends BlockBase {
     }
 
     $node = \Drupal::routeMatch()->getParameter('node');
+
+    $querystring_filter = \Drupal::request()->query->get('filter');
+    if (!empty($querystring_filter)) {
+      $querystring_filter = urldecode($querystring_filter);
+    }
     $string_of_search_terms = $this->build_search_string(!empty($node->field_ungerboeck_search_term->value) ? $node->field_ungerboeck_search_term->value : '', $config['title_search']);
+    $string_of_search_terms = $this->build_search_string($string_of_search_terms, $querystring_filter);
+
     if (empty($string_of_search_terms)) {
       $show_all_events = TRUE;
       $search_terms = array ();
@@ -80,6 +89,7 @@ class EventListBlock extends BlockBase {
       }
 
       if ($display_event) {
+        if ($count < $max_events) {
         $startdatetimestr = $this->format_date_time(Helpers::combine_date_time($event['EVENTSTARTDATE'], $event['EVENTSTARTTIME']));
 
         $results .= '  <li>' . PHP_EOL;
@@ -94,14 +104,16 @@ class EventListBlock extends BlockBase {
 //$results .= '    ' . $event['EVENTTYPECODE'] . '<br />' . PHP_EOL;
 
         $results .= '  </li>' . PHP_EOL;
-        $count++;
-        if ($count >= $max_events) {
-          break;
         }
+        $count++;
       }
     }
 
     $results .= '</ul>' . PHP_EOL;
+
+    if (!empty($config['show_more_page']) && $count > $max_events) {
+      $results .= '<a class="events_show_more" href="' . $base_url . '/' . $config['show_more_page'] . '?filter=' . urlencode($string_of_search_terms) . '">Show more</a>' . '<br />';
+    }
 
     return [
       '#markup' => $this->t($results),
@@ -124,7 +136,7 @@ class EventListBlock extends BlockBase {
 
     $form['max_events'] = array(
       '#type' => 'textfield',
-      '#title' => t('Maximum Number of Events to display'),
+      '#title' => t('Maximum Number of Events to Display'),
       '#description' => t('Zero (0) means display all events'),
       '#size' => 15,
       '#default_value' => $config['max_events'],
@@ -133,7 +145,7 @@ class EventListBlock extends BlockBase {
     $form['event_details_page'] = array(
       '#type' => 'checkbox',
       '#title' => t('Link to Details Page'),
-      '#description' => t('When checked, every event title will link to a details page, otherwise, titles will link to registration pages where appropriate'),
+      '#description' => t('When checked, every event title will link to a details page, otherwise, titles will link to registration pages where available'),
       '#default_value' => $config['event_details_page'],
     );
 
@@ -153,9 +165,16 @@ class EventListBlock extends BlockBase {
 
     $form['title_search'] = array(
       '#type' => 'textfield',
-      '#title' => t('Restrict Search by title'),
+      '#title' => t('Restrict Search by Title'),
       '#description' => t('Only show events with this search term in title, blank means show all events'),
       '#default_value' => $config['title_search'],
+    );
+
+    $form['show_more_page'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Show More Events Page'),
+      '#description' => t('Path to add to base URL where all events are listed'),
+      '#default_value' => $config['show_more_page'],
     );
 
     $form['placement'] = array(
@@ -181,6 +200,7 @@ class EventListBlock extends BlockBase {
     $this->configuration['format_with_time'] = $values['format_with_time'];
     $this->configuration['format_without_time'] = $values['format_without_time'];
     $this->configuration['title_search'] = $values['title_search'];
+    $this->configuration['show_more_page'] = $values['show_more_page'];
     $this->configuration['placement'] = $values['placement'];
   }
 
@@ -194,6 +214,7 @@ class EventListBlock extends BlockBase {
       'format_with_time' => 'M j, Y, g:i a',
       'format_without_time' => 'M j, Y',
       'title_search' => '',
+      'show_more_page' => '',
       'placement' => '',
     );
   }
