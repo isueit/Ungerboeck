@@ -111,8 +111,8 @@ class EventListBlock extends BlockBase {
 
     $results .= '</ul>' . PHP_EOL;
 
-    if (!empty($config['show_more_page']) && $count > $max_events) {
-      $results .= '<a class="events_show_more" href="' . $base_url . '/' . $config['show_more_page'] . '?filter=' . urlencode($string_of_search_terms) . '">Show more</a>' . '<br />';
+    if (!empty($config['show_more_page']) && !empty($config['show_more_text']) && $count > $max_events) {
+      $results .= '<a class="events_show_more" href="' . $base_url . '/' . $config['show_more_page'] . '?filter=' . urlencode($string_of_search_terms) . '">' . $config['show_more_text'] . '</a><br />';
     }
 
     return [
@@ -177,6 +177,13 @@ class EventListBlock extends BlockBase {
       '#default_value' => $config['show_more_page'],
     );
 
+    $form['show_more_text'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Text for Show More Events Link'),
+      '#description' => t('Text that\'s used in the anchor tag'),
+      '#default_value' => $config['show_more_text'],
+    );
+
     $form['placement'] = array(
       '#type' => 'textfield',
       '#title' => t('Placed on Page'),
@@ -201,6 +208,7 @@ class EventListBlock extends BlockBase {
     $this->configuration['format_without_time'] = $values['format_without_time'];
     $this->configuration['title_search'] = $values['title_search'];
     $this->configuration['show_more_page'] = $values['show_more_page'];
+    $this->configuration['show_more_text'] = $values['show_more_text'];
     $this->configuration['placement'] = $values['placement'];
   }
 
@@ -215,6 +223,7 @@ class EventListBlock extends BlockBase {
       'format_without_time' => 'M j, Y',
       'title_search' => '',
       'show_more_page' => '',
+      'show_more_text' => 'More',
       'placement' => '',
     );
   }
