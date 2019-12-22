@@ -197,6 +197,13 @@ class Helpers {
     $json = json_decode($result, TRUE);
     $questions_array = array();
 
+
+    // Some events were using the wrong description, this should fix that
+    $recode = array();
+    foreach($json['result']['questions']['QID1']['choices'] as $key=>$value) {
+      $recode[$key] = strval($value['recode']);
+    }
+
     foreach($json['result']['questions'] as $question) {
       if (($choiceposition = strpos($question['questionText'], 'QID1/ChoiceDescription')) !== FALSE) {
         $newline_position = strpos($question['questionText'], PHP_EOL);
@@ -204,7 +211,8 @@ class Helpers {
         $description = substr($question['questionText'], $newline_position + 1);
         $descID = strval(intval(substr($question['questionText'], $choiceposition + 23, 10)));
 
-        $questions_array[$descID] = $description;
+        // Use the recoded description number
+        $questions_array[$recode[$descID]] = $description;
       }
     }
 
