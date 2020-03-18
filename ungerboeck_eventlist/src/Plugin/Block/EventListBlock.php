@@ -37,8 +37,9 @@ class EventListBlock extends BlockBase {
 
     // Do NOT cache a page with this block on it.
     \Drupal::service('page_cache_kill_switch')->trigger();
- 
-    $results = "";
+
+    $results = '';
+    $results .= '<p class="event_cancellations">In order to prioritize the health and safety of all, we have canceled/postponed face-to-face events through April 4, 2020. Thank you for your understanding.</p>';
     $count = 0;
     $id = $this->getDerivativeID();
     $config = $this->getConfiguration();
@@ -119,7 +120,7 @@ class EventListBlock extends BlockBase {
       '#markup' => $this->t($results),
     ];
   }
-  
+
   /**
    * {@inheritdoc}
    */
