@@ -39,11 +39,15 @@ class EventListBlock extends BlockBase {
     \Drupal::service('page_cache_kill_switch')->trigger();
 
     $results = '';
-    $results .= '<p class="event_cancellations">In order to prioritize the health and safety of all, we have canceled/postponed face-to-face events through April 4, 2020. Thank you for your understanding.</p>';
     $count = 0;
     $id = $this->getDerivativeID();
     $config = $this->getConfiguration();
     $module_config = \Drupal::config('ungerboeck_eventlist.settings');
+
+    // Show annoncement if there is one
+    if (!empty($config['announcement_text'])) {
+      $results .= PHP_EOL . '<div class="ungerboeck_eventlist_announcement_text">' . $config['announcement_text'] . '</div>' . PHP_EOL;
+    }
 
     $max_events = intval($config['max_events']);
     if ($max_events == 0) {
@@ -185,6 +189,15 @@ class EventListBlock extends BlockBase {
       '#default_value' => $config['show_more_text'],
     );
 
+    $form['announcement_text'] = array(
+      '#type' => 'textfield',
+      '#title' => t('Announcement Text'),
+      '#description' => t('Text to be placed above the events in this block. Used for special announcements, ie COVID-19 cancellations'),
+      '#size' => 75,
+      '#maxlength' => 300,
+      '#default_value' => $config['announcement_text'],
+    );
+
     $form['placement'] = array(
       '#type' => 'textfield',
       '#title' => t('Placed on Page'),
@@ -210,6 +223,7 @@ class EventListBlock extends BlockBase {
     $this->configuration['title_search'] = $values['title_search'];
     $this->configuration['show_more_page'] = $values['show_more_page'];
     $this->configuration['show_more_text'] = $values['show_more_text'];
+    $this->configuration['announcement_text'] = $values['announcement_text'];
     $this->configuration['placement'] = $values['placement'];
   }
 
@@ -225,6 +239,7 @@ class EventListBlock extends BlockBase {
       'title_search' => '',
       'show_more_page' => '',
       'show_more_text' => 'More',
+      'announement_text' => '',
       'placement' => '',
     );
   }
