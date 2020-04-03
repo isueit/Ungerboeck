@@ -46,6 +46,7 @@ class EventDetailsController extends ControllerBase {
 
               // Found the right Qualtrics Response;
 $results .= $this->get_event_address($survey_response);
+$results .= $this->get_event_description($survey_response, $event['EVENTTYPECODE'] !== 'NONPRIORITY');
 
               if ($event['EVENTTYPECODE'] == 'NONPRIORITY') {
 //                $results .= $this->handle_nonpriority_events($survey_response);
@@ -123,7 +124,7 @@ $results .= $this->get_event_address($survey_response);
   private function handle_nonpriority_events($response) {
     $results = '';
     $results .= '  <div class="event_location">' . $response['values']['QID80_5'] . '</div>' . PHP_EOL;
-    $results .= '  <div class="event_description">' . $response['values']['QID80_2'] . '</div>' . PHP_EOL;
+    //$results .= '  <div class="event_description">' . $response['values']['QID80_2'] . '</div>' . PHP_EOL;
     $results .= '  <div class="event_contact_label">Contact Info:</div>' . PHP_EOL;
     $results .= '  <div class="event_contact">' . $response['values']['QID80_4'] . '</div>' . PHP_EOL;
     $results .= '  <div class="event_contact_email"><a href="mailto://' . $response['values']['QID80_8'] . '">' . $response['values']['QID80_8'] . '</a></div>' . PHP_EOL;
@@ -132,10 +133,10 @@ $results .= $this->get_event_address($survey_response);
   }
 
   private function handle_priority_events($event, $response) {
-    $list_of_descriptions = json_decode(Helpers::hs_read_descriptions_file(), TRUE);
+    //$list_of_descriptions = json_decode(Helpers::hs_read_descriptions_file(), TRUE);
 
-    $results = '';
-    $mydescription = '  <div class="event_description">' . str_replace(' target="_blank"', '', $list_of_descriptions[$response['values']['QID1']]) . '</div>';
+    //$results = '';
+    //$mydescription = '  <div class="event_description">' . str_replace(' target="_blank"', '', $list_of_descriptions[$response['values']['QID1']]) . '</div>';
 
     //if (!empty($response['values']['QID8_1'])) {
       //$results .= '  <div class="event_address">' . $response['values']['QID8_1'] . '<br />' . PHP_EOL;
@@ -150,7 +151,7 @@ $results .= $this->get_event_address($survey_response);
 
     if (!empty($response['values']['QID105_5'])) {
       $results .= '  <div class="event_location">' . $response['values']['QID105_5'] . '</div>' . PHP_EOL;
-      $results .= $mydescription . PHP_EOL;
+      //$results .= $mydescription . PHP_EOL;
       $results .= '  <div class="event_instructor_label">' . 'Instructor:</div>' . PHP_EOL;
       $results .= '  <div class="event_instructor">' . $response['values']['QID105_4'] . '</div>' . PHP_EOL;
       $results .= '  <div class="event_instructor_email"><a href="mailto://' . $response['values']['QID105_8'] . '">' . $response['values']['QID105_8'] . '</a></div>' . PHP_EOL;
@@ -187,24 +188,41 @@ $results .= $this->get_event_address($survey_response);
   private function get_event_address($survey_response) {
     $event_address = '';
 
-    if (!empty($survey_response['values']['QID8_1'])) {
-      if (substr($survey_response['values']['QID8_1'], 0, 7) === 'http://' || substr($survey_response['values']['QID8_1'], 0, 8) === 'https://') {
-        $event_address .= '<a href="' . trim($survey_response['values']['QID8_1']) . '">' . trim($survey_response['values']['QID8_1']) . '</a><br />' . PHP_EOL;
+    if (!empty($survey_response['values']['QID8_1'])) { $event_address .= '    ' . $survey_response['values']['QID8_1'] . '<br />' . PHP_EOL; }
+    if (!empty($survey_response['values']['QID8_2'])) {
+      if (substr($survey_response['values']['QID8_2'], 0, 7) === 'http://' || substr($survey_response['values']['QID8_2'], 0, 8) === 'https://') {
+        $event_address .= '<a href="' . trim($survey_response['values']['QID8_2']) . '">' . trim($survey_response['values']['QID8_2']) . '</a><br />' . PHP_EOL;
       } else {
-        $event_address .= $survey_response['values']['QID8_1'] . '<br />' . PHP_EOL;
+        $event_address .= $survey_response['values']['QID8_2'] . '<br />' . PHP_EOL;
       }
-
-      if (!empty($survey_response['values']['QID8_2'])) { $event_address .= '    ' . $survey_response['values']['QID8_2'] . '<br />' . PHP_EOL; }
-      if (!empty($survey_response['values']['QID8_3'])) { $event_address .= '    ' . $survey_response['values']['QID8_3'] . ', '; }
-      if (!empty($survey_response['values']['QID8_4'])) { $event_address .= $survey_response['values']['QID8_4'] . ' '; }
-      if (!empty($survey_response['values']['QID8_5'])) { $event_address .= $survey_response['values']['QID8_5'] . '<br />' . PHP_EOL; }
-      if (!empty($survey_response['values']['QID8_6'])) { $event_address .= str_replace("\n", '<br />', $survey_response['values']['QID8_6']) . PHP_EOL; }
     }
+    if (!empty($survey_response['values']['QID8_3'])) { $event_address .= '    ' . $survey_response['values']['QID8_3'] . ', '; }
+    if (!empty($survey_response['values']['QID8_4'])) { $event_address .= $survey_response['values']['QID8_4'] . ' '; }
+    if (!empty($survey_response['values']['QID8_5'])) { $event_address .= $survey_response['values']['QID8_5'] . '<br />' . PHP_EOL; }
+    //if (!empty($survey_response['values']['QID8_6'])) { $event_address .= str_replace("\n", '<br />', $survey_response['values']['QID8_6']) . PHP_EOL; }
 
     if (!empty($event_address)) {
       $event_address = '  <div class="event_address">' . $event_address . '  </div>' . PHP_EOL;
     }
-    return($event_address);
+    return ($event_address);
+  }
+
+  private function get_event_description($survey_response, $is_priority_program) {
+    $event_description = '';
+    $list_of_descriptions = json_decode(Helpers::hs_read_descriptions_file(), TRUE);
+
+    if ($is_priority_program) {
+      $event_description = str_replace(' target="_blank"', '', $list_of_descriptions[$survey_response['values']['QID1']]);
+    } elseif (!empty($survey_response['values']['QID80_2'])) {
+      $event_description = $survey_response['values']['QID80_2'];
+    } else {
+      $event_description = $survey_response['values']['QID22_2'];
+    }
+
+    if (!empty($event_description)) {
+      $event_description = '  <div class="event_description">' . $event_description . '</div>' . PHP_EOL;
+    }
+    return ($event_description);
   }
 
 }
