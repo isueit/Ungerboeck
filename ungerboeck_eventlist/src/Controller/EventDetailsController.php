@@ -49,6 +49,8 @@ $results .= $this->get_event_address($survey_response);
 $results .= $this->get_event_location($survey_response);
 $results .= $this->get_event_description($survey_response, $event['EVENTTYPECODE'] !== 'NONPRIORITY');
 $results .= $this->get_event_contact($survey_response);
+$results .= $this->get_event_instructor($survey_response);
+$results .= $this->get_event_sessions($survey_response);
 
               if ($event['EVENTTYPECODE'] == 'NONPRIORITY') {
 //                $results .= $this->handle_nonpriority_events($survey_response);
@@ -123,16 +125,16 @@ $results .= $this->get_event_contact($survey_response);
     return $output;
   }
 
-  private function handle_nonpriority_events($response) {
-    $results = '';
+  //private function handle_nonpriority_events($response) {
+    //$results = '';
     //$results .= '  <div class="event_location">' . $response['values']['QID80_5'] . '</div>' . PHP_EOL;
     //$results .= '  <div class="event_description">' . $response['values']['QID80_2'] . '</div>' . PHP_EOL;
     //$results .= '  <div class="event_contact_label">Contact Info:</div>' . PHP_EOL;
     //$results .= '  <div class="event_contact">' . $response['values']['QID80_4'] . '</div>' . PHP_EOL;
     //$results .= '  <div class="event_contact_email"><a href="mailto://' . $response['values']['QID80_8'] . '">' . $response['values']['QID80_8'] . '</a></div>' . PHP_EOL;
 
-    return $results;
-  }
+    //return $results;
+  //}
 
   private function handle_priority_events($event, $response) {
     //$list_of_descriptions = json_decode(Helpers::hs_read_descriptions_file(), TRUE);
@@ -151,13 +153,13 @@ $results .= $this->get_event_contact($survey_response);
       //$results .= $mydescription . PHP_EOL;
     //}
 
-    if (!empty($response['values']['QID105_5'])) {
+    //if (!empty($response['values']['QID105_5'])) {
       //$results .= '  <div class="event_location">' . $response['values']['QID105_5'] . '</div>' . PHP_EOL;
       //$results .= $mydescription . PHP_EOL;
-      $results .= '  <div class="event_instructor_label">' . 'Instructor:</div>' . PHP_EOL;
-      $results .= '  <div class="event_instructor">' . $response['values']['QID105_4'] . '</div>' . PHP_EOL;
-      $results .= '  <div class="event_instructor_email"><a href="mailto://' . $response['values']['QID105_8'] . '">' . $response['values']['QID105_8'] . '</a></div>' . PHP_EOL;
-    }
+      //$results .= '  <div class="event_instructor_label">' . 'Instructor:</div>' . PHP_EOL;
+      //$results .= '  <div class="event_instructor">' . $response['values']['QID105_4'] . '</div>' . PHP_EOL;
+      //$results .= '  <div class="event_instructor_email"><a href="mailto://' . $response['values']['QID105_8'] . '">' . $response['values']['QID105_8'] . '</a></div>' . PHP_EOL;
+    //}
 
     //if (!empty($response['values']['QID19_1'])) {
       //$results .= '  <div class="event_contact_label">Contact Info:</div>' . PHP_EOL;
@@ -166,25 +168,25 @@ $results .= $this->get_event_contact($survey_response);
       //if (!empty($response['values']['QID19_3'])) { $results .= '  <div class="event_contact_phone">' . $response['values']['QID19_3'] . '</div>' . PHP_EOL; }
     //}
 
-    if (!empty($response['values']['QID10_1'])) {
-      $results .= '  <div class="event_instructor_label">Instructor:</div>' . PHP_EOL;
-      $results .= '  <div class="event_instructor">' . $response['values']['QID10_1'] . '</div>' . PHP_EOL;
-      if (!empty($response['values']['QID10_2'])) { $results .= '  <div class="event_instructor_email"><a href="' . $response['values']['QID10_2'] . '">' . $response['values']['QID10_2'] . '</a></div>' . PHP_EOL; }
-      if (!empty($response['values']['QID10_3'])) { $results .= '  <div class="event_instructor_phone">' . $response['values']['QID10_3'] . '</div>' . PHP_EOL; }
-    }
+    //if (!empty($response['values']['QID10_1'])) {
+      //$results .= '  <div class="event_instructor_label">Instructor:</div>' . PHP_EOL;
+      //$results .= '  <div class="event_instructor">' . $response['values']['QID10_1'] . '</div>' . PHP_EOL;
+      //if (!empty($response['values']['QID10_2'])) { $results .= '  <div class="event_instructor_email"><a href="' . $response['values']['QID10_2'] . '">' . $response['values']['QID10_2'] . '</a></div>' . PHP_EOL; }
+      //if (!empty($response['values']['QID10_3'])) { $results .= '  <div class="event_instructor_phone">' . $response['values']['QID10_3'] . '</div>' . PHP_EOL; }
+    //}
 
-    if (!empty($response['values']['QID74_1_1'])) {
-      $results .= '  <div class="event_sessions_label">Sessions:</div>' . PHP_EOL;
-      $i = 1;
-      while (!empty($response['values']['QID74_1_' . $i])) {
-        $results .= '  <div class="event_session">' . $response['values']['QID74_1_' . $i] . ' ';
-        $results .= $response['values']['QID74_2_' . $i] . ' - ';
-        $results .= $response['values']['QID74_3_' . $i]. '</div>' . PHP_EOL;
-        $i++;
-      }
-    }
+    //if (!empty($response['values']['QID74_1_1'])) {
+      //$results .= '  <div class="event_sessions_label">Sessions:</div>' . PHP_EOL;
+      //$i = 1;
+      //while (!empty($response['values']['QID74_1_' . $i])) {
+        //$results .= '  <div class="event_session">' . $response['values']['QID74_1_' . $i] . ' ';
+        //$results .= $response['values']['QID74_2_' . $i] . ' - ';
+        //$results .= $response['values']['QID74_3_' . $i]. '</div>' . PHP_EOL;
+        //$i++;
+      //}
+    //}
 
-    return $results;
+    //return $results;
   }
 
   private function get_event_address($survey_response) {
@@ -261,5 +263,47 @@ $results .= $this->get_event_contact($survey_response);
     }
 
     return $event_contact;
+  }
+
+  private function get_event_instructor($survey_response) {
+    $event_instructor = '';
+
+    if (!empty($survey_response['values']['QID105_5'])) {
+      $event_instructor .= '  <div class="event_instructor_label">' . 'Instructor:</div>' . PHP_EOL;
+      $event_instructor .= '  <div class="event_instructor_name">' . $survey_response['values']['QID105_4'] . '</div>' . PHP_EOL;
+      $event_instructor .= '  <div class="event_instructor_email"><a href="mailto:' . $survey_response['values']['QID105_8'] . '">' . $survey_response['values']['QID105_8'] . '</a></div>' . PHP_EOL;
+    } elseif (!empty($survey_response['values']['QID10_1'])) {
+      $event_instructor .= '  <div class="event_instructor_label">Instructor:</div>' . PHP_EOL;
+      $event_instructor .= '  <div class="event_instructor_name">' . $survey_response['values']['QID10_1'] . '</div>' . PHP_EOL;
+      if (!empty($survey_response['values']['QID10_2'])) { $event_instructor .= '  <div class="event_instructor_email"><a href="mailto:' . $survey_response['values']['QID10_2'] . '">' . $survey_response['values']['QID10_2'] . '</a></div>' . PHP_EOL; }
+      if (!empty($survey_response['values']['QID10_3'])) { $event_instructor .= '  <div class="event_instructor_phone">' . $survey_response['values']['QID10_3'] . '</div>' . PHP_EOL; }
+    }
+
+    if (!empty($event_instructor)) {
+      $event_instructor = '  <div class="event_instructor">' . $event_instructor . '</div>' . PHP_EOL;
+    }
+
+    return $event_instructor;
+  }
+
+  private function get_event_sessions($survey_response) {
+    $event_sessions = '';
+
+    if (!empty($survey_response['values']['QID74_1_1'])) {
+      $event_sessions .= '  <div class="event_sessions_label">Sessions:</div>' . PHP_EOL;
+      $i = 1;
+      while (!empty($survey_response['values']['QID74_1_' . $i])) {
+        $event_sessions .= '  <div class="event_session_names">' . $survey_response['values']['QID74_1_' . $i] . ' ';
+        $event_sessions .= $survey_response['values']['QID74_2_' . $i] . ' - ';
+        $event_sessions .= $survey_response['values']['QID74_3_' . $i]. '</div>' . PHP_EOL;
+        $i++;
+      }
+    }
+
+    if (!empty($event_sessions)) {
+      $event_sessions = '  <div class="event_sessions">' . $event_sessions . '</div>' . PHP_EOL;
+    }
+
+    return $event_sessions;
   }
 }
