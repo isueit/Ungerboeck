@@ -66,6 +66,7 @@ class EventDetailsController extends ControllerBase {
     $element = array(
       '#title' => $title,
       '#markup' => $results,
+      '#attached' => [ 'library' => ['ungerboeck_eventlist/ungerboeck_eventlist']],
     );
     return $element;
   }
