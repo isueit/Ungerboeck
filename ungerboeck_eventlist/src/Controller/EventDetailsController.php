@@ -46,6 +46,7 @@ class EventDetailsController extends ControllerBase {
 
               // Found the right Qualtrics Response;
 $results .= $this->get_event_address($survey_response);
+$results .= $this->get_event_location($survey_response);
 $results .= $this->get_event_description($survey_response, $event['EVENTTYPECODE'] !== 'NONPRIORITY');
 
               if ($event['EVENTTYPECODE'] == 'NONPRIORITY') {
@@ -123,7 +124,7 @@ $results .= $this->get_event_description($survey_response, $event['EVENTTYPECODE
 
   private function handle_nonpriority_events($response) {
     $results = '';
-    $results .= '  <div class="event_location">' . $response['values']['QID80_5'] . '</div>' . PHP_EOL;
+    //$results .= '  <div class="event_location">' . $response['values']['QID80_5'] . '</div>' . PHP_EOL;
     //$results .= '  <div class="event_description">' . $response['values']['QID80_2'] . '</div>' . PHP_EOL;
     $results .= '  <div class="event_contact_label">Contact Info:</div>' . PHP_EOL;
     $results .= '  <div class="event_contact">' . $response['values']['QID80_4'] . '</div>' . PHP_EOL;
@@ -150,7 +151,7 @@ $results .= $this->get_event_description($survey_response, $event['EVENTTYPECODE
     //}
 
     if (!empty($response['values']['QID105_5'])) {
-      $results .= '  <div class="event_location">' . $response['values']['QID105_5'] . '</div>' . PHP_EOL;
+      //$results .= '  <div class="event_location">' . $response['values']['QID105_5'] . '</div>' . PHP_EOL;
       //$results .= $mydescription . PHP_EOL;
       $results .= '  <div class="event_instructor_label">' . 'Instructor:</div>' . PHP_EOL;
       $results .= '  <div class="event_instructor">' . $response['values']['QID105_4'] . '</div>' . PHP_EOL;
@@ -204,7 +205,7 @@ $results .= $this->get_event_description($survey_response, $event['EVENTTYPECODE
     if (!empty($event_address)) {
       $event_address = '  <div class="event_address">' . $event_address . '  </div>' . PHP_EOL;
     }
-    return ($event_address);
+    return $event_address;
   }
 
   private function get_event_description($survey_response, $is_priority_program) {
@@ -222,8 +223,22 @@ $results .= $this->get_event_description($survey_response, $event['EVENTTYPECODE
     if (!empty($event_description)) {
       $event_description = '  <div class="event_description">' . $event_description . '</div>' . PHP_EOL;
     }
-    return ($event_description);
+    return $event_description;
   }
 
+  private function get_event_location($survey_response) {
+    $event_location = '';
+
+    if (!empty($survey_response['values']['QID105_5'])) {
+      $event_location = $survey_response['values']['QID105_5'];
+    } else {
+      $event_location = $survey_response['values']['QID80_5'];
+    }
+    if (!empty($event_location)) {
+      $event_location = '  <div class="event_location">' . $event_location . '</div>' . PHP_EOL;
+    }
+
+    return $event_location;
+  }
 }
 
