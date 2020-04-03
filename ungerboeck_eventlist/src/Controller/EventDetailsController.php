@@ -45,20 +45,12 @@ class EventDetailsController extends ControllerBase {
             if ($survey_response['values']['_recordId'] == $event['QUALTRICSID']) {
 
               // Found the right Qualtrics Response;
-$results .= $this->get_event_address($survey_response);
-$results .= $this->get_event_location($survey_response);
-$results .= $this->get_event_description($survey_response, $event['EVENTTYPECODE'] !== 'NONPRIORITY');
-$results .= $this->get_event_contact($survey_response);
-$results .= $this->get_event_instructor($survey_response);
-$results .= $this->get_event_sessions($survey_response);
-
-              if ($event['EVENTTYPECODE'] == 'NONPRIORITY') {
-//                $results .= $this->handle_nonpriority_events($survey_response);
-              }
-              else {
-//                $results .= $this->handle_priority_events($event, $survey_response);
-              }
-
+              $results .= $this->get_event_address($survey_response);
+              $results .= $this->get_event_location($survey_response);
+              $results .= $this->get_event_description($survey_response, $event['EVENTTYPECODE'] !== 'NONPRIORITY');
+              $results .= $this->get_event_contact($survey_response);
+              $results .= $this->get_event_instructor($survey_response);
+              $results .= $this->get_event_sessions($survey_response);
               break;
             }
           }
@@ -123,70 +115,6 @@ $results .= $this->get_event_sessions($survey_response);
     $output = '  <div class="event_details_dates">' . $output . '</div>';
 
     return $output;
-  }
-
-  //private function handle_nonpriority_events($response) {
-    //$results = '';
-    //$results .= '  <div class="event_location">' . $response['values']['QID80_5'] . '</div>' . PHP_EOL;
-    //$results .= '  <div class="event_description">' . $response['values']['QID80_2'] . '</div>' . PHP_EOL;
-    //$results .= '  <div class="event_contact_label">Contact Info:</div>' . PHP_EOL;
-    //$results .= '  <div class="event_contact">' . $response['values']['QID80_4'] . '</div>' . PHP_EOL;
-    //$results .= '  <div class="event_contact_email"><a href="mailto://' . $response['values']['QID80_8'] . '">' . $response['values']['QID80_8'] . '</a></div>' . PHP_EOL;
-
-    //return $results;
-  //}
-
-  private function handle_priority_events($event, $response) {
-    //$list_of_descriptions = json_decode(Helpers::hs_read_descriptions_file(), TRUE);
-
-    //$results = '';
-    //$mydescription = '  <div class="event_description">' . str_replace(' target="_blank"', '', $list_of_descriptions[$response['values']['QID1']]) . '</div>';
-
-    //if (!empty($response['values']['QID8_1'])) {
-      //$results .= '  <div class="event_address">' . $response['values']['QID8_1'] . '<br />' . PHP_EOL;
-      //if (!empty($response['values']['QID8_2'])) { $results .= '    ' . $response['values']['QID8_2'] . '<br />' . PHP_EOL; }
-      //if (!empty($response['values']['QID8_3'])) { $results .= '    ' . $response['values']['QID8_3'] . ', '; }
-      //if (!empty($response['values']['QID8_4'])) { $results .= $response['values']['QID8_4'] . ' '; }
-      //if (!empty($response['values']['QID8_5'])) { $results .= $response['values']['QID8_5'] . '<br />' . PHP_EOL; }
-      //if (!empty($response['values']['QID8_6'])) { $results .= $response['values']['QID8_6'] . '<br />' . PHP_EOL; }
-      //$results .= '  </div>' . PHP_EOL;
-      //$results .= $mydescription . PHP_EOL;
-    //}
-
-    //if (!empty($response['values']['QID105_5'])) {
-      //$results .= '  <div class="event_location">' . $response['values']['QID105_5'] . '</div>' . PHP_EOL;
-      //$results .= $mydescription . PHP_EOL;
-      //$results .= '  <div class="event_instructor_label">' . 'Instructor:</div>' . PHP_EOL;
-      //$results .= '  <div class="event_instructor">' . $response['values']['QID105_4'] . '</div>' . PHP_EOL;
-      //$results .= '  <div class="event_instructor_email"><a href="mailto://' . $response['values']['QID105_8'] . '">' . $response['values']['QID105_8'] . '</a></div>' . PHP_EOL;
-    //}
-
-    //if (!empty($response['values']['QID19_1'])) {
-      //$results .= '  <div class="event_contact_label">Contact Info:</div>' . PHP_EOL;
-      //$results .= '  <div class="event_contact">' . $response['values']['QID19_1'] . '</div>' . PHP_EOL;
-      //if (!empty($response['values']['QID19_2'])) { $results .= '  <div class="event_contact_email"><a href="' . $response['values']['QID19_2'] . '">' . $response['values']['QID19_2'] . '</a></div>' . PHP_EOL; }
-      //if (!empty($response['values']['QID19_3'])) { $results .= '  <div class="event_contact_phone">' . $response['values']['QID19_3'] . '</div>' . PHP_EOL; }
-    //}
-
-    //if (!empty($response['values']['QID10_1'])) {
-      //$results .= '  <div class="event_instructor_label">Instructor:</div>' . PHP_EOL;
-      //$results .= '  <div class="event_instructor">' . $response['values']['QID10_1'] . '</div>' . PHP_EOL;
-      //if (!empty($response['values']['QID10_2'])) { $results .= '  <div class="event_instructor_email"><a href="' . $response['values']['QID10_2'] . '">' . $response['values']['QID10_2'] . '</a></div>' . PHP_EOL; }
-      //if (!empty($response['values']['QID10_3'])) { $results .= '  <div class="event_instructor_phone">' . $response['values']['QID10_3'] . '</div>' . PHP_EOL; }
-    //}
-
-    //if (!empty($response['values']['QID74_1_1'])) {
-      //$results .= '  <div class="event_sessions_label">Sessions:</div>' . PHP_EOL;
-      //$i = 1;
-      //while (!empty($response['values']['QID74_1_' . $i])) {
-        //$results .= '  <div class="event_session">' . $response['values']['QID74_1_' . $i] . ' ';
-        //$results .= $response['values']['QID74_2_' . $i] . ' - ';
-        //$results .= $response['values']['QID74_3_' . $i]. '</div>' . PHP_EOL;
-        //$i++;
-      //}
-    //}
-
-    //return $results;
   }
 
   private function get_event_address($survey_response) {
